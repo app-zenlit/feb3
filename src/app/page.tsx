@@ -416,14 +416,27 @@ export default function HomePage() {
       target: window,
       type: "wheel,touch",
       wheelSpeed: 0.9,
-      tolerance: 12,
+      tolerance: 8,
       preventDefault: true,
       allowClicks: true,
       ignoreCheck: (event) => {
         const scrollable = getScrollableTarget(event as Event);
-        if (!scrollable) return false;
+        if (!scrollable) {
+          const direction = getDirectionFromEvent(event as Event);
+          if (!direction) return false;
+          if (direction === "down" && currentIndexRef.current >= SECTION_ORDER.length - 1) {
+            return true;
+          }
+          if (direction === "up" && currentIndexRef.current <= 0) {
+            return true;
+          }
+          return false;
+        }
+        if (event?.type === "touchstart") {
+          return true;
+        }
         const direction = getDirectionFromEvent(event as Event);
-        if (!direction) return false;
+        if (!direction) return true;
         return canScrollWithin(event as Event, direction);
       },
       onDown: (self) => {

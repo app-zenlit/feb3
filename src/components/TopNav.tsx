@@ -4,7 +4,8 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Home", href: "#home" },
   { label: "Who We Are", href: "#about" },
   { label: "What We Do", href: "#services" },
-  { label: "Partners", href: "#partners" }
+  { label: "Partners", href: "#partners" },
+  { label: "Clients", href: "#clients" }
 ];
 
 export function TopNav({

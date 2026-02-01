@@ -6,11 +6,13 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { Observer, ScrollToPlugin } from "gsap/all";
 import { Playfair_Display } from "next/font/google";
+import { motion } from "framer-motion";
 import { TopNav } from "@/components/TopNav";
+import { partners } from "@/content/partners";
 
-type SectionId = "home" | "about" | "services";
+type SectionId = "home" | "about" | "services" | "partners";
 
-const SECTION_ORDER: SectionId[] = ["home", "about", "services"];
+const SECTION_ORDER: SectionId[] = ["home", "about", "services", "partners"];
 
 type SectionNavItem = {
   id: string;
@@ -21,11 +23,9 @@ type SectionNavItem = {
 
 const SECTION_NAV_ITEMS: SectionNavItem[] = [
   { id: "home", label: "Home", href: "#home", sectionId: "home" },
-  { id: "who-we-are", label: "Who We Are", href: "/who-we-are" },
-  { id: "what-we-do", label: "What We Do", href: "/what-we-do" },
-  { id: "our-clients", label: "Clients", href: "/our-clients" },
-  { id: "contact", label: "Contact", href: "/contact" },
-  { id: "faq", label: "FAQ", href: "/faq" }
+  { id: "who-we-are", label: "Who We Are", href: "#about", sectionId: "about" },
+  { id: "what-we-do", label: "What We Do", href: "#services", sectionId: "services" },
+  { id: "partners", label: "Partners", href: "#partners", sectionId: "partners" }
 ];
 
 const ROMAN_NUMERALS = ["I", "II", "III", "IV", "V", "VI"];
@@ -167,6 +167,7 @@ export default function HomePage() {
   const homeRef = useRef<HTMLElement | null>(null);
   const aboutRef = useRef<HTMLElement | null>(null);
   const servicesRef = useRef<HTMLElement | null>(null);
+  const partnersRef = useRef<HTMLElement | null>(null);
   const heroBgRef = useRef<HTMLDivElement | null>(null);
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -187,7 +188,8 @@ export default function HomePage() {
       const map: Record<SectionId, HTMLElement | null> = {
         home: homeRef.current,
         about: aboutRef.current,
-        services: servicesRef.current
+        services: servicesRef.current,
+        partners: partnersRef.current
       };
 
       return map[SECTION_ORDER[index]];
@@ -796,6 +798,70 @@ export default function HomePage() {
                         )}
                       </div>
                     </article>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="partners"
+          ref={partnersRef}
+          className="relative isolate min-h-screen overflow-hidden bg-paper"
+        >
+          <div className="flex min-h-screen flex-col">
+            <div className="relative h-[38vh] min-h-[240px] w-full overflow-hidden">
+              <Image
+                src="/images/2.jpg"
+                alt=""
+                fill
+                className="object-cover"
+                sizes="100vw"
+              />
+              <div className="absolute inset-0 bg-gradient-to-b from-[rgba(11,27,59,0.78)] via-[rgba(11,27,59,0.62)] to-[rgba(11,27,59,0.72)]" />
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_25%,rgba(176,141,87,0.18),transparent_40%)]" />
+              <div className="absolute inset-0 flex items-center justify-center px-6">
+                <motion.h2
+                  data-animate
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.6 }}
+                  transition={{ duration: 0.6, ease: "easeOut" }}
+                  className="text-center text-4xl font-semibold text-paper drop-shadow-[0_12px_30px_rgba(3,7,18,0.55)] sm:text-5xl"
+                >
+                  Our Partners
+                </motion.h2>
+              </div>
+            </div>
+            <div
+              data-scrollable
+              className="flex-1 min-h-0 overflow-y-auto bg-paper px-6 py-12"
+            >
+              <div className="mx-auto w-full max-w-[1180px] space-y-8">
+                <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+                  {partners.map((partner, index) => (
+                    <motion.div
+                      key={partner.name}
+                      initial={{ opacity: 0, y: 24 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, amount: 0.35 }}
+                      transition={{ duration: 0.5, delay: index * 0.08, ease: "easeOut" }}
+                      className="flex flex-col"
+                    >
+                      <div className="relative aspect-[3/4] overflow-hidden rounded-2xl border border-rule bg-paper shadow-[0_18px_40px_rgba(11,27,59,0.16)]">
+                        <Image
+                          src={partner.image}
+                          alt={partner.name}
+                          fill
+                          className="object-cover"
+                          sizes="(min-width: 1024px) 22vw, (min-width: 640px) 42vw, 80vw"
+                        />
+                      </div>
+                      <p className="mt-4 text-center text-sm font-semibold uppercase tracking-[0.24em] text-ink">
+                        {partner.name}
+                      </p>
+                    </motion.div>
                   ))}
                 </div>
               </div>

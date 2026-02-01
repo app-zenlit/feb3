@@ -23,7 +23,7 @@ const SECTION_NAV_ITEMS: SectionNavItem[] = [
   { id: "home", label: "Home", href: "#home", sectionId: "home" },
   { id: "who-we-are", label: "Who We Are", href: "/who-we-are" },
   { id: "what-we-do", label: "What We Do", href: "/what-we-do" },
-  { id: "our-clients", label: "Our Clients", href: "/our-clients" },
+  { id: "our-clients", label: "Clients", href: "/our-clients" },
   { id: "contact", label: "Contact", href: "/contact" },
   { id: "faq", label: "FAQ", href: "/faq" }
 ];
@@ -828,13 +828,16 @@ function SectionProgress({
               key={item.id}
               type="button"
               onClick={() => onNavigate(item, index)}
-              className={`pointer-events-auto flex h-8 w-8 items-center justify-center rounded-full border transition ${
+              className={`pointer-events-auto group relative flex h-8 w-8 items-center justify-center rounded-full border transition ${
                 activeIndex === index
                   ? "border-ink bg-ink text-paper shadow-[0_12px_30px_rgba(11,27,59,0.25)]"
                   : "border-[color:var(--rule)] text-muted hover:border-ink hover:text-ink"
               }`}
               aria-label={item.label}
             >
+              <span className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white/90 px-2 py-1 text-[0.65rem] text-[#333] opacity-0 shadow-sm transition-opacity duration-200 group-hover:opacity-100">
+                {item.label}
+              </span>
               {ROMAN_NUMERALS[index] ?? `${index + 1}`}
             </button>
           ))}

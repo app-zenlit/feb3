@@ -662,6 +662,11 @@ function SectionProgress({
     <div className="pointer-events-none fixed bottom-8 left-1/2 z-40 flex -translate-x-1/2 flex-col items-center justify-center gap-3">
       {isOnHome && (
         <>
+          <p
+            className={`${playfairDisplayClassName} text-center text-base text-paper drop-shadow-[0_3px_16px_rgba(0,0,0,0.65)] sm:text-xl max-w-[600px] px-4`}
+          >
+            {landingSlides[activeSlideIndex]?.caption}
+          </p>
           <div className="flex items-center justify-center gap-3 pointer-events-auto">
             {landingSlides.map((_, index) => (
               <button
@@ -676,11 +681,6 @@ function SectionProgress({
               />
             ))}
           </div>
-          <p
-            className={`${playfairDisplayClassName} text-center text-base text-paper drop-shadow-[0_3px_16px_rgba(0,0,0,0.65)] sm:text-xl max-w-[600px] px-4`}
-          >
-            {landingSlides[activeSlideIndex]?.caption}
-          </p>
         </>
       )}
       <div className="flex items-center gap-3 rounded-full border border-[color:var(--rule)] bg-paper/80 px-5 py-3 shadow-[0_18px_40px_rgba(11,27,59,0.18)] backdrop-blur">

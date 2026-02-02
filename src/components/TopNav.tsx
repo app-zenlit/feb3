@@ -17,10 +17,12 @@ const NAV_ITEMS: NavItem[] = [
 
 export function TopNav({
   activeSection,
-  onNavigate
+  onNavigate,
+  isVisible = true
 }: {
   activeSection?: string;
   onNavigate?: (href: string) => void;
+  isVisible?: boolean;
 }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
@@ -54,7 +56,9 @@ export function TopNav({
   };
 
   return (
-    <header className="sticky top-0 z-40 border-b border-rule bg-paper/90 backdrop-blur">
+    <header className={`sticky top-0 z-40 border-b border-rule bg-paper/90 backdrop-blur transition-all duration-500 ${
+      isVisible ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"
+    }`}>
       <div className="mx-auto flex w-full max-w-[1180px] items-center justify-between gap-6 px-6 py-5">
         <div className="flex flex-wrap items-center gap-3">
           <a

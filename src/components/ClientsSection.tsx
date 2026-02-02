@@ -19,7 +19,7 @@ export const ClientsSection = forwardRef<HTMLElement, ClientsSectionProps>(
       <section ref={ref} id={id} className={className ?? "w-full"}>
         <div className="relative flex min-h-screen w-full items-center justify-center overflow-hidden">
           <Image
-            src="/images/clients/0.jpg"
+            src="/images/clients/1.jpg"
             alt="Clients hero background"
             fill
             priority
@@ -42,7 +42,7 @@ export const ClientsSection = forwardRef<HTMLElement, ClientsSectionProps>(
                 <div key={client.id} className="flex flex-col items-center text-center">
                   <div className="flex h-24 w-full items-center justify-center">
                     <Image
-                      src={`/images/clients/${client.id}/logo.jpg`}
+                      src={`/images/clients/${client.id}/1.jpg`}
                       alt={client.name ? `${client.name} logo` : "Client logo"}
                       width={200}
                       height={120}

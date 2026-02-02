@@ -59,15 +59,15 @@ const playfairDisplay = Playfair_Display({
 
 const landingSlides = [
   {
-    src: "/images/landing-page/0.jpg",
+    src: "/images/landing-page/1.jpg",
     caption: "Rooted in Heritage — Serving Since 1962"
   },
   {
-    src: "/images/landing-page/1.jpg",
+    src: "/images/landing-page/2.jpg",
     caption: "Enlightened Across Generations"
   },
   {
-    src: "/images/landing-page/2.jpg",
+    src: "/images/landing-page/3.jpg",
     caption: "Evolving from Manual to Digital Era"
   }
 ];
@@ -684,7 +684,7 @@ export default function HomePage() {
           className="relative isolate min-h-screen overflow-hidden bg-paper"
         >
           <div className="absolute inset-0">
-            <Image src="/images/2.jpg" alt="" fill className="object-cover" sizes="100vw" />
+            <Image src="/images/about/1.jpg" alt="" fill className="object-cover" sizes="100vw" />
           </div>
           <div className="absolute inset-0 bg-gradient-to-b from-[rgba(251,248,242,0.86)] via-[rgba(251,248,242,0.78)] to-[rgba(251,248,242,0.86)]" />
           <div className="absolute inset-0 bg-gradient-to-r from-[rgba(11,27,59,0.18)] via-transparent to-[rgba(251,248,242,0.7)]" />
@@ -746,7 +746,7 @@ export default function HomePage() {
           className="relative isolate min-h-screen overflow-hidden"
         >
           <div className="absolute inset-0">
-            <Image src="/images/3.jpg" alt="" fill className="object-cover" sizes="100vw" />
+            <Image src="/images/services/1.jpg" alt="" fill className="object-cover" sizes="100vw" />
           </div>
           <div className="absolute inset-0 bg-gradient-to-b from-[rgba(11,27,59,0.68)] via-[rgba(11,27,59,0.6)] to-[rgba(11,27,59,0.72)]" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_25%,rgba(176,141,87,0.14),transparent_38%)]" />
@@ -840,7 +840,7 @@ export default function HomePage() {
           <div className="flex min-h-screen flex-col">
             <div className="relative h-[38vh] min-h-[240px] w-full overflow-hidden">
               <Image
-                src="/images/2.jpg"
+                src="/images/partners/1.jpg"
                 alt=""
                 fill
                 className="object-cover"

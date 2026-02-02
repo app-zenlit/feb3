@@ -31,7 +31,7 @@ export const FAQSection = forwardRef<HTMLElement, FAQSectionProps>(
       >
         <div className="absolute inset-0">
           <Image
-            src="/images/faq/0.jpg"
+            src="/images/faq/1.jpg"
             alt=""
             fill
             className="object-cover"

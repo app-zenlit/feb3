@@ -49,7 +49,7 @@ export const EnquirySection = forwardRef<HTMLElement, EnquirySectionProps>(
       >
         <div className="absolute inset-0">
           <Image
-            src="/images/enquiry/0.jpg"
+            src="/images/enquiry/1.jpg"
             alt=""
             fill
             className="object-cover"

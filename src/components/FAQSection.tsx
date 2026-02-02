@@ -40,7 +40,7 @@ export const FAQSection = forwardRef<HTMLElement, FAQSectionProps>(
         </div>
 
         <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1180px] flex-col px-6 pb-20 pt-28 sm:pt-32">
-          <div className="text-center text-paper">
+          <div className="text-left text-paper">
             <div className="mb-4 inline-flex items-center gap-3 text-[0.7rem] uppercase tracking-[0.42em] text-paper/75">
               <span className="inline-block h-px w-8 bg-[color:var(--gold)]" aria-hidden />
               Insights
@@ -53,7 +53,7 @@ export const FAQSection = forwardRef<HTMLElement, FAQSectionProps>(
             </p>
           </div>
 
-          <div className="mx-auto mt-12 w-full max-w-3xl space-y-5">
+          <div className="mt-12 w-full max-w-3xl space-y-5">
             {(faqs as FAQItem[]).map((faq, index) => {
               const isExpanded = expandedIndex === index;
               return (

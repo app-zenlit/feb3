@@ -340,7 +340,6 @@ export default function HomePage() {
       <TopNav
         activeSection={SECTION_ORDER[navActiveIndex]}
         onNavigate={handleNavigate}
-        isVisible={navActiveIndex !== 0}
       />
       <main className="relative">
         <section
@@ -402,7 +401,7 @@ export default function HomePage() {
           </div>
           <div className="absolute inset-0 bg-gradient-to-b from-[rgba(251,248,242,0.86)] via-[rgba(251,248,242,0.78)] to-[rgba(251,248,242,0.86)]" />
           <div className="absolute inset-0 bg-gradient-to-r from-[rgba(11,27,59,0.18)] via-transparent to-[rgba(251,248,242,0.7)]" />
-          <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1180px] items-center px-6 py-28">
+          <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1180px] items-center px-6 pt-28 pb-16">
             <div className="grid w-full gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:items-start">
               <div className="space-y-6">
                 <div data-animate className="flex items-center gap-3 text-[0.7rem] uppercase tracking-[0.42em] text-muted">
@@ -464,7 +463,7 @@ export default function HomePage() {
           </div>
           <div className="absolute inset-0 bg-gradient-to-b from-[rgba(11,27,59,0.68)] via-[rgba(11,27,59,0.6)] to-[rgba(11,27,59,0.72)]" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_25%,rgba(176,141,87,0.14),transparent_38%)]" />
-          <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1180px] flex-col justify-center px-6 py-28">
+          <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1180px] flex-col justify-center px-6 pt-28 pb-16">
             <div className="space-y-6 text-paper">
               <div data-animate className="flex items-center gap-3 text-[0.7rem] uppercase tracking-[0.42em] text-paper/80">
                 <span className="inline-block h-px w-8 bg-[color:var(--gold)]" aria-hidden />

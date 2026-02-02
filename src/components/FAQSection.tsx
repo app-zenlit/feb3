@@ -38,8 +38,6 @@ export const FAQSection = forwardRef<HTMLElement, FAQSectionProps>(
             sizes="100vw"
           />
         </div>
-        <div className="absolute inset-0 bg-[rgba(6,10,20,0.65)]" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[rgba(6,10,20,0.75)] via-[rgba(6,10,20,0.6)] to-[rgba(6,10,20,0.8)]" />
 
         <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1180px] flex-col px-6 pb-20 pt-28 sm:pt-32">
           <div className="text-center text-paper">

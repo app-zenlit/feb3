@@ -400,7 +400,7 @@ export default function HomePage() {
           <div className="absolute inset-0">
             <Image src="/images/about/1.jpg" alt="" fill className="object-cover" sizes="100vw" />
           </div>
-          <div className="absolute inset-0 bg-white/20" />
+          <div className="absolute inset-0 bg-white/80" />
           <div className="relative z-10 mx-auto flex h-screen w-full max-w-[1180px] items-center px-6 pt-28 pb-16">
             <div className="grid w-full gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:items-start">
               <div className="space-y-6">

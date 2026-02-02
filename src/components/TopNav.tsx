@@ -35,7 +35,7 @@ export function TopNav({
             Since 1954
           </span>
         </div>
-        <nav className="hidden items-center gap-8 text-xs uppercase tracking-[0.3em] text-ink md:flex">
+        <nav className="flex items-center gap-8 text-xs uppercase tracking-[0.3em] text-ink">
           {NAV_ITEMS.map((item) => (
             <a
               key={item.href}
@@ -56,34 +56,6 @@ export function TopNav({
             </a>
           ))}
         </nav>
-        <details className="relative md:hidden">
-          <summary className="cursor-pointer list-none text-xs uppercase tracking-[0.3em] text-ink">
-            Menu
-          </summary>
-          <div className="absolute right-0 mt-3 w-52 rounded-xl border border-rule bg-paper p-4 shadow-[0_18px_40px_rgba(11,27,59,0.08)]">
-            <nav className="flex flex-col gap-3 text-xs uppercase tracking-[0.3em] text-ink">
-              {NAV_ITEMS.map((item) => (
-                <a
-                  key={item.href}
-                  href={item.href}
-                  onClick={(e) => {
-                    if (onNavigate) {
-                      e.preventDefault();
-                      onNavigate(item.href);
-                    }
-                  }}
-                  className={`pb-0.5 transition hover:text-ink ${
-                    activeSection === item.href.replace("#", "")
-                      ? "border-b border-ink"
-                      : "border-b border-transparent text-muted"
-                  }`}
-                >
-                  {item.label}
-                </a>
-              ))}
-            </nav>
-          </div>
-        </details>
       </div>
     </header>
   );

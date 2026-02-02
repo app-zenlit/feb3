@@ -376,7 +376,7 @@ export default function HomePage() {
           </div>
           <div className="absolute inset-0 bg-gradient-to-b from-[rgba(11,27,59,0.7)] via-[rgba(11,27,59,0.58)] to-[rgba(11,27,59,0.46)]" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_25%,rgba(176,141,87,0.16),transparent_40%)]" />
-          <div className="relative z-10 mx-auto flex h-screen w-full max-w-[1180px] flex-col justify-center px-6 py-20">
+          <div className="relative z-10 mx-auto flex h-screen w-full max-w-[1180px] flex-col justify-center px-6 pb-20">
             <div className="max-w-2xl space-y-7 text-paper">
               <div data-animate className="flex items-center gap-3 text-[0.7rem] uppercase tracking-[0.42em] text-paper/80">
                 <span className="inline-block h-px w-8 bg-[color:var(--gold)]" aria-hidden />

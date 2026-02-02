@@ -452,22 +452,18 @@ export default function HomePage() {
         <section
           id="services"
           ref={servicesRef}
-          className="relative isolate min-h-screen overflow-hidden"
+          className="relative isolate h-screen overflow-hidden"
         >
           <div className="absolute inset-0">
             <Image src="/images/services/1.jpg" alt="" fill className="object-cover" sizes="100vw" />
           </div>
           <div className="absolute inset-0 bg-gradient-to-b from-[rgba(11,27,59,0.68)] via-[rgba(11,27,59,0.6)] to-[rgba(11,27,59,0.72)]" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_25%,rgba(176,141,87,0.14),transparent_38%)]" />
-          <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1180px] flex-col justify-center px-6 pt-28 pb-16">
-            <div className="space-y-6 text-paper">
-              <div data-animate className="flex items-center gap-3 text-[0.7rem] uppercase tracking-[0.42em] text-paper/80">
-                <span className="inline-block h-px w-8 bg-[color:var(--gold)]" aria-hidden />
-                What We Do
-              </div>
+          <div className="relative z-10 mx-auto flex h-screen w-full max-w-[1180px] flex-col px-6 pt-28 pb-16">
+            <div className="flex-shrink-0 space-y-6 text-paper">
               <div className="max-w-3xl space-y-3">
                 <h2 data-animate className="text-4xl font-semibold sm:text-5xl">
-                  Integrated advisory, audit, and assurance.
+                  What We Do
                 </h2>
                 <p data-animate className="text-lg leading-relaxed text-paper/80 sm:text-xl">
                   Seamless support across audit, taxation, risk advisory, virtual CFO, and strategic consulting—delivered with the discipline of a heritage practice and the pace of modern business.
@@ -475,7 +471,7 @@ export default function HomePage() {
               </div>
               <div
                 data-scrollable
-                className="max-h-[68vh] overflow-y-auto pr-2"
+                className="flex-1 min-h-0 overflow-y-auto pr-2 mt-6"
               >
                 <div className="grid gap-6 md:grid-cols-2">
                   {services.map((service, index) => (
@@ -544,10 +540,10 @@ export default function HomePage() {
         <section
           id="partners"
           ref={partnersRef}
-          className="relative isolate min-h-screen overflow-hidden bg-paper"
+          className="relative isolate h-screen overflow-hidden bg-paper"
         >
-          <div className="flex min-h-screen flex-col">
-            <div className="relative h-[38vh] min-h-[240px] w-full overflow-hidden">
+          <div className="flex h-screen flex-col pt-28">
+            <div className="relative h-[30vh] min-h-[200px] w-full flex-shrink-0 overflow-hidden">
               <Image
                 src="/images/partners/1.jpg"
                 alt=""
@@ -572,7 +568,7 @@ export default function HomePage() {
             </div>
             <div
               data-scrollable
-              className="flex-1 min-h-0 overflow-y-auto bg-paper px-6 py-12"
+              className="flex-1 min-h-0 overflow-y-auto bg-paper px-6 py-8"
             >
               <div className="mx-auto w-full max-w-[1180px] space-y-8">
                 <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">

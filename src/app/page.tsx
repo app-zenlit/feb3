@@ -206,6 +206,8 @@ export default function HomePage() {
   const transitionIdRef = useRef(0);
   const lastTouchYRef = useRef<number | null>(null);
   const slideCount = landingSlides.length;
+  const touchStartXRef = useRef<number | null>(null);
+  const touchEndXRef = useRef<number | null>(null);
 
   const getSectionByIndex = useCallback(
     (index: number) => {
@@ -438,6 +440,38 @@ export default function HomePage() {
     return () => window.clearInterval(intervalId);
   }, [slideCount]);
 
+  const handlePrevSlide = useCallback(() => {
+    setActiveSlideIndex((prev) => (prev - 1 + slideCount) % slideCount);
+  }, [slideCount]);
+
+  const handleNextSlide = useCallback(() => {
+    setActiveSlideIndex((prev) => (prev + 1) % slideCount);
+  }, [slideCount]);
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStartXRef.current = e.touches[0]?.clientX ?? null;
+  }, []);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    touchEndXRef.current = e.touches[0]?.clientX ?? null;
+  }, []);
+
+  const handleTouchEnd = useCallback(() => {
+    if (!touchStartXRef.current || !touchEndXRef.current) return;
+    const distance = touchStartXRef.current - touchEndXRef.current;
+    const minSwipeDistance = 50;
+
+    if (Math.abs(distance) > minSwipeDistance) {
+      if (distance > 0) {
+        handleNextSlide();
+      } else {
+        handlePrevSlide();
+      }
+    }
+
+    touchStartXRef.current = null;
+    touchEndXRef.current = null;
+  }, [handleNextSlide, handlePrevSlide]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -587,7 +621,13 @@ export default function HomePage() {
           ref={homeRef}
           className="relative isolate min-h-screen overflow-hidden"
         >
-          <div ref={heroBgRef} className="absolute inset-0">
+          <div
+            ref={heroBgRef}
+            className="absolute inset-0"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+          >
             {landingSlides.map((slide, index) => (
               <div
                 key={slide.src}
@@ -610,11 +650,27 @@ export default function HomePage() {
           <div className="absolute inset-0 bg-gradient-to-b from-[rgba(11,27,59,0.7)] via-[rgba(11,27,59,0.58)] to-[rgba(11,27,59,0.46)]" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_25%,rgba(176,141,87,0.16),transparent_40%)]" />
           <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-[rgba(6,10,20,0.9)] via-[rgba(6,10,20,0.35)] to-transparent pb-10 pt-16">
-            <p
-              className={`${playfairDisplay.className} mx-auto w-full max-w-[1180px] px-6 text-base text-slate-200 drop-shadow-[0_3px_16px_rgba(0,0,0,0.65)] sm:text-xl md:text-2xl`}
-            >
-              {landingSlides[activeSlideIndex]?.caption}
-            </p>
+            <div className="mx-auto w-full max-w-[1180px] px-6 space-y-6">
+              <p
+                className={`${playfairDisplay.className} text-base text-slate-200 drop-shadow-[0_3px_16px_rgba(0,0,0,0.65)] sm:text-xl md:text-2xl`}
+              >
+                {landingSlides[activeSlideIndex]?.caption}
+              </p>
+              <div className="flex items-center justify-center gap-3 pointer-events-auto">
+                {landingSlides.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setActiveSlideIndex(index)}
+                    className={`h-2 rounded-full transition-all duration-300 ${
+                      index === activeSlideIndex
+                        ? 'w-8 bg-paper shadow-[0_0_12px_rgba(251,248,242,0.5)]'
+                        : 'w-2 bg-paper/40 hover:bg-paper/60'
+                    }`}
+                    aria-label={`Go to slide ${index + 1}`}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
           <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1180px] flex-col justify-center px-6 py-28">
             <div className="max-w-2xl space-y-7 text-paper">

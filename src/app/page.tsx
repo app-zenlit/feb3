@@ -540,7 +540,7 @@ export default function HomePage() {
         <section
           id="partners"
           ref={partnersRef}
-          className="relative isolate min-h-screen overflow-hidden bg-paper"
+          className="relative isolate min-h-screen overflow-hidden"
         >
           <div className="flex min-h-screen flex-col pt-28">
             <div className="relative h-[30vh] min-h-[200px] w-full flex-shrink-0 overflow-hidden">
@@ -587,7 +587,7 @@ export default function HomePage() {
                       }}
                       className="flex flex-col"
                     >
-                      <div className="relative aspect-[3/4] overflow-hidden rounded-2xl border border-rule bg-paper shadow-[0_18px_40px_rgba(11,27,59,0.16)] transition-all duration-300 hover:border-[color:var(--gold)] hover:shadow-[0_22px_45px_rgba(11,27,59,0.20)]">
+                      <div className="relative aspect-[3/4] overflow-hidden rounded-2xl border border-rule shadow-[0_18px_40px_rgba(11,27,59,0.16)] transition-all duration-300 hover:border-[color:var(--gold)] hover:shadow-[0_22px_45px_rgba(11,27,59,0.20)]">
                         <Image
                           src={partner.image}
                           alt={partner.name}

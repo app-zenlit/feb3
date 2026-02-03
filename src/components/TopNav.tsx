@@ -5,16 +5,12 @@ import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import { navItemVariants } from "@/lib/motion";
 
-type NavItem = { label: string; href: string };
+type NavItem = { label: string; href: string; panelId?: string };
 
 const NAV_ITEMS: NavItem[] = [
-  { label: "Home", href: "#home" },
-  { label: "Who We Are", href: "#about" },
-  { label: "What We Do", href: "#services" },
-  { label: "Partners", href: "#partners" },
-  { label: "Clients", href: "#clients" },
-  { label: "Enquiry", href: "#enquiry" },
-  { label: "FAQ", href: "#faq" }
+  { label: "About Us", href: "#about", panelId: "about" },
+  { label: "What We Do", href: "#work", panelId: "work" },
+  { label: "Contact Us", href: "#contact", panelId: "contact" }
 ];
 
 export function TopNav({

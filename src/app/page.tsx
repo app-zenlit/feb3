@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Playfair_Display } from "next/font/google";
 import { motion } from "framer-motion";
@@ -11,45 +10,16 @@ import { EnquirySection } from "@/components/EnquirySection";
 import { FAQSection } from "@/components/FAQSection";
 import { TopNav } from "@/components/TopNav";
 import { VisionPurposeFlow } from "@/components/VisionPurposeFlow";
-import { fadeUp, fadeUpFast, fadeLeft, fadeRight, staggerContainer, scaleYReveal, viewportConfig, viewportConfigPartial, stagger, durations, PREMIUM_EASE } from "@/lib/motion";
+import { MainSnapLayout, PanelId, scrollToPanel } from "@/components/MainSnapLayout";
+import { fadeUp, fadeUpFast, fadeLeft, fadeRight, staggerContainer, viewportConfig, viewportConfigPartial, stagger, durations, PREMIUM_EASE } from "@/lib/motion";
 
-type SectionId =
-  | "home"
-  | "about"
-  | "services"
-  | "partners"
-  | "clients"
-  | "enquiry"
-  | "faq";
+const ROMAN_NUMERALS = ["I", "II", "III"];
 
-const SECTION_ORDER: SectionId[] = [
-  "home",
-  "about",
-  "services",
-  "partners",
-  "clients",
-  "enquiry",
-  "faq"
+const PANEL_NAV_ITEMS = [
+  { id: "about", label: "About Us", href: "#about" },
+  { id: "work", label: "What We Do", href: "#work" },
+  { id: "contact", label: "Contact Us", href: "#contact" }
 ];
-
-type SectionNavItem = {
-  id: string;
-  label: string;
-  href: string;
-  sectionId?: SectionId;
-};
-
-const SECTION_NAV_ITEMS: SectionNavItem[] = [
-  { id: "home", label: "Home", href: "#home", sectionId: "home" },
-  { id: "who-we-are", label: "Who We Are", href: "#about", sectionId: "about" },
-  { id: "what-we-do", label: "What We Do", href: "#services", sectionId: "services" },
-  { id: "partners", label: "Partners", href: "#partners", sectionId: "partners" },
-  { id: "clients", label: "Clients", href: "#clients", sectionId: "clients" },
-  { id: "enquiry", label: "Enquiry", href: "#enquiry", sectionId: "enquiry" },
-  { id: "faq", label: "FAQ", href: "#faq", sectionId: "faq" }
-];
-
-const ROMAN_NUMERALS = ["I", "II", "III", "IV", "V", "VI", "VII"];
 
 const playfairDisplay = Playfair_Display({
   subsets: ["latin"],
@@ -184,86 +154,39 @@ const services = [
 ];
 
 export default function HomePage() {
-  const router = useRouter();
-  const homeRef = useRef<HTMLElement | null>(null);
-  const aboutRef = useRef<HTMLElement | null>(null);
-  const servicesRef = useRef<HTMLElement | null>(null);
-  const partnersRef = useRef<HTMLElement | null>(null);
-  const clientsRef = useRef<HTMLElement | null>(null);
-  const enquiryRef = useRef<HTMLElement | null>(null);
-  const faqRef = useRef<HTMLElement | null>(null);
-
-  const [navActiveIndex, setNavActiveIndex] = useState(0);
+  const [activePanel, setActivePanel] = useState<PanelId>("about");
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
   const slideCount = landingSlides.length;
   const touchStartXRef = useRef<number | null>(null);
   const touchEndXRef = useRef<number | null>(null);
 
-  const getSectionByIndex = useCallback(
-    (index: number) => {
-      const map: Record<SectionId, HTMLElement | null> = {
-        home: homeRef.current,
-        about: aboutRef.current,
-        services: servicesRef.current,
-        partners: partnersRef.current,
-        clients: clientsRef.current,
-        enquiry: enquiryRef.current,
-        faq: faqRef.current
-      };
+  const aboutPanelRef = useRef<HTMLDivElement>(null);
+  const workPanelRef = useRef<HTMLDivElement>(null);
+  const contactPanelRef = useRef<HTMLDivElement>(null);
 
-      return map[SECTION_ORDER[index]];
-    },
-    []
-  );
+  const homeRef = useRef<HTMLElement | null>(null);
+  const aboutRef = useRef<HTMLElement | null>(null);
+  const partnersRef = useRef<HTMLElement | null>(null);
+  const servicesRef = useRef<HTMLElement | null>(null);
+  const clientsRef = useRef<HTMLElement | null>(null);
+  const enquiryRef = useRef<HTMLElement | null>(null);
+  const faqRef = useRef<HTMLElement | null>(null);
 
-  const getNearestSectionIndex = useCallback(() => {
-    let nearestIndex = 0;
-    let smallestDistance = Number.POSITIVE_INFINITY;
+  const handlePanelChange = useCallback((panel: PanelId) => {
+    setActivePanel(panel);
+  }, []);
 
-    SECTION_ORDER.forEach((_, index) => {
-      const section = getSectionByIndex(index);
-      if (!section) return;
-      const distance = Math.abs(section.getBoundingClientRect().top);
-      if (distance < smallestDistance) {
-        smallestDistance = distance;
-        nearestIndex = index;
-      }
-    });
+  const handleNavigate = useCallback((href: string) => {
+    const panelId = href.replace("#", "") as PanelId;
+    scrollToPanel(panelId);
+  }, []);
 
-    return nearestIndex;
-  }, [getSectionByIndex]);
-
-  const handleNavigate = useCallback(
-    (href: string) => {
-      const normalized = href.replace("#", "") as SectionId;
-      const targetIndex = SECTION_ORDER.indexOf(normalized);
-      if (targetIndex >= 0) {
-        const section = getSectionByIndex(targetIndex);
-        if (section) {
-          section.scrollIntoView({ behavior: "smooth" });
-        }
-      }
-    },
-    [getSectionByIndex]
-  );
-
-  const handleSectionNav = useCallback(
-    (item: SectionNavItem, index: number) => {
-      setNavActiveIndex(index);
-      if (item.sectionId) {
-        const targetIndex = SECTION_ORDER.indexOf(item.sectionId);
-        if (targetIndex >= 0) {
-          const section = getSectionByIndex(targetIndex);
-          if (section) {
-            section.scrollIntoView({ behavior: "smooth" });
-          }
-          return;
-        }
-      }
-      router.push(item.href);
-    },
-    [getSectionByIndex, router]
-  );
+  const handlePanelNav = useCallback((index: number) => {
+    const panelId = PANEL_NAV_ITEMS[index]?.id as PanelId;
+    if (panelId) {
+      scrollToPanel(panelId);
+    }
+  }, []);
 
   useEffect(() => {
     const prefersMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -308,307 +231,319 @@ export default function HomePage() {
     touchEndXRef.current = null;
   }, [handleNextSlide, handlePrevSlide]);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const nearestIndex = getNearestSectionIndex();
-      if (nearestIndex !== navActiveIndex) {
-        setNavActiveIndex(nearestIndex);
-      }
-    };
+  const isOnHome = activePanel === "about";
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [getNearestSectionIndex, navActiveIndex]);
-
-  return (
+  const aboutPanel = (
     <>
-      <TopNav
-        activeSection={SECTION_ORDER[navActiveIndex]}
-        onNavigate={handleNavigate}
-        isVisible={navActiveIndex !== 0}
-      />
-      <main className="relative">
-        <section
-          id="home"
-          ref={homeRef}
-          className="relative isolate min-h-screen overflow-hidden"
+      <section
+        id="home"
+        ref={homeRef}
+        className="relative isolate min-h-screen overflow-hidden"
+      >
+        <div
+          className="absolute inset-0 hero-bg-motion"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
         >
-          <div
-            className="absolute inset-0 hero-bg-motion"
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
-          >
-            {landingSlides.map((slide, index) => (
-              <div
-                key={slide.src}
-                className={`absolute inset-0 transition-opacity duration-700 ${
-                  index === activeSlideIndex ? "opacity-100" : "opacity-0"
-                }`}
-              >
-                <Image
-                  src={slide.src}
-                  alt=""
-                  fill
-                  priority={index === 0}
-                  className="object-cover grayscale"
-                  sizes="100vw"
-                />
-                <div className="absolute inset-0 bg-[rgba(6,10,20,0.28)]" />
-              </div>
-            ))}
-          </div>
-          <div className="absolute inset-0 bg-gradient-to-b from-[rgba(11,27,59,0.7)] via-[rgba(11,27,59,0.58)] to-[rgba(11,27,59,0.46)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_25%,rgba(176,141,87,0.16),transparent_40%)]" />
-          <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1180px] flex-col justify-center px-6 pb-20">
-            <div className="max-w-2xl space-y-7 text-paper">
-              <div data-animate className="flex items-center gap-3 text-[0.7rem] uppercase tracking-[0.42em] text-paper/80">
-                <span className="inline-block h-px w-8 bg-[color:var(--gold)]" aria-hidden />
-                Chartered Accountants
-              </div>
-              <h1
-                data-animate
-                className="hero-title text-5xl font-semibold sm:text-6xl md:text-7xl"
-              >
-                Nathan &amp; Co.
-              </h1>
-              <div className="hero-divider" aria-hidden />
-              <p
-                data-animate
-                className="hero-tagline max-w-xl text-xl leading-relaxed text-paper/85"
-              >
-                Upholding the highest ideals of quality, integrity, and trust.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <section
-          id="about"
-          ref={aboutRef}
-          className="relative isolate min-h-screen overflow-hidden bg-paper"
-        >
-          <div className="absolute inset-0">
-            <Image src="/images/about/1.jpg" alt="" fill className="object-cover" sizes="100vw" />
-          </div>
-          <div className="absolute inset-0 bg-white/80" />
-          <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1180px] items-center px-6 pt-28 pb-16">
-            <div className="grid w-full gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:items-start">
-              <div className="space-y-6">
-                <motion.h2
-                  variants={fadeUp}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={viewportConfig}
-                  className="text-4xl font-semibold text-ink sm:text-5xl"
-                >
-                  Who We Are
-                </motion.h2>
-                <motion.div
-                  variants={staggerContainer(stagger.normal)}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={viewportConfig}
-                  className="space-y-4"
-                >
-                  {aboutParagraphs.map((paragraph, index) => (
-                    <motion.p
-                      key={paragraph}
-                      variants={fadeUpFast}
-                      className="text-lg leading-relaxed text-muted sm:text-xl"
-                    >
-                      {paragraph}
-                    </motion.p>
-                  ))}
-                </motion.div>
-              </div>
-              <VisionPurposeFlow />
-            </div>
-          </div>
-        </section>
-
-        <section
-          id="services"
-          ref={servicesRef}
-          className="relative isolate min-h-screen overflow-hidden"
-        >
-          <div className="absolute inset-0">
-            <Image src="/images/services/1.jpg" alt="" fill className="object-cover" sizes="100vw" />
-          </div>
-          <div className="absolute inset-0 bg-gradient-to-b from-[rgba(11,27,59,0.68)] via-[rgba(11,27,59,0.6)] to-[rgba(11,27,59,0.72)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_25%,rgba(176,141,87,0.14),transparent_38%)]" />
-          <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1180px] flex-col px-6 pt-28 pb-16">
-            <div className="flex-shrink-0 space-y-6 text-paper">
-              <div className="max-w-3xl space-y-3">
-                <motion.h2
-                  variants={fadeUp}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={viewportConfig}
-                  className="text-4xl font-semibold sm:text-5xl"
-                >
-                  What We Do
-                </motion.h2>
-                <motion.p
-                  variants={fadeUp}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={viewportConfig}
-                  className="text-lg leading-relaxed text-paper/80 sm:text-xl"
-                >
-                  Seamless support across audit, taxation, risk advisory, virtual CFO, and strategic consulting—delivered with the discipline of a heritage practice and the pace of modern business.
-                </motion.p>
-              </div>
-              <div className="flex-1 mt-6">
-                <div className="grid grid-cols-3 gap-4 md:gap-5 lg:gap-6 auto-rows-fr">
-                  {services.map((service, index) => {
-                    const isOdd = index % 2 === 0;
-                    return (
-                      <motion.article
-                        key={service.title}
-                        variants={isOdd ? fadeLeft : fadeRight}
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={viewportConfigPartial}
-                        transition={{
-                          duration: durations.entry,
-                          delay: index * stagger.relaxed,
-                          ease: PREMIUM_EASE
-                        }}
-                        whileHover={{
-                          y: -3,
-                          transition: { duration: durations.hover, ease: PREMIUM_EASE }
-                        }}
-                        className="group relative flex min-h-[120px] items-center justify-center overflow-hidden rounded-xl border border-[color:var(--rule)] bg-paper/85 p-5 text-center text-ink shadow-[0_20px_45px_rgba(11,27,59,0.18)] transition-shadow duration-300 ease-out hover:border-[color:var(--gold)] hover:shadow-[0_24px_60px_rgba(11,27,59,0.22)]"
-                      >
-                        <div className="absolute inset-0 bg-gradient-to-br from-[rgba(11,27,59,0.03)] to-transparent opacity-0 transition duration-300 group-hover:opacity-100" />
-                        <div className="relative">
-                          <h3 className="text-lg font-semibold text-ink">{service.title}</h3>
-                        </div>
-                      </motion.article>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section
-          id="partners"
-          ref={partnersRef}
-          className="relative isolate min-h-screen overflow-hidden"
-        >
-          <div className="flex min-h-screen flex-col pt-28">
-            <div className="relative h-[30vh] min-h-[200px] w-full flex-shrink-0 overflow-hidden">
+          {landingSlides.map((slide, index) => (
+            <div
+              key={slide.src}
+              className={`absolute inset-0 transition-opacity duration-700 ${
+                index === activeSlideIndex ? "opacity-100" : "opacity-0"
+              }`}
+            >
               <Image
-                src="/images/partners/1.jpg"
+                src={slide.src}
                 alt=""
                 fill
-                className="object-cover"
+                priority={index === 0}
+                className="object-cover grayscale"
                 sizes="100vw"
               />
-              <div className="absolute inset-0 flex items-center justify-center px-6">
-                <motion.h2
-                  variants={fadeUp}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={viewportConfig}
-                  className="text-center text-4xl font-semibold text-paper drop-shadow-[0_12px_30px_rgba(3,7,18,0.55)] sm:text-5xl"
-                >
-                  Our Partners
-                </motion.h2>
+              <div className="absolute inset-0 bg-[rgba(6,10,20,0.28)]" />
+            </div>
+          ))}
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-b from-[rgba(11,27,59,0.7)] via-[rgba(11,27,59,0.58)] to-[rgba(11,27,59,0.46)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_25%,rgba(176,141,87,0.16),transparent_40%)]" />
+        <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1180px] flex-col justify-center px-6 pb-20">
+          <div className="max-w-2xl space-y-7 text-paper">
+            <div data-animate className="flex items-center gap-3 text-[0.7rem] uppercase tracking-[0.42em] text-paper/80">
+              <span className="inline-block h-px w-8 bg-[color:var(--gold)]" aria-hidden />
+              Chartered Accountants
+            </div>
+            <h1
+              data-animate
+              className="hero-title text-5xl font-semibold sm:text-6xl md:text-7xl"
+            >
+              Nathan &amp; Co.
+            </h1>
+            <div className="hero-divider" aria-hidden />
+            <p
+              data-animate
+              className="hero-tagline max-w-xl text-xl leading-relaxed text-paper/85"
+            >
+              Upholding the highest ideals of quality, integrity, and trust.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="about"
+        ref={aboutRef}
+        className="relative isolate min-h-screen overflow-hidden bg-paper"
+      >
+        <div className="absolute inset-0">
+          <Image src="/images/about/1.jpg" alt="" fill className="object-cover" sizes="100vw" />
+        </div>
+        <div className="absolute inset-0 bg-white/80" />
+        <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1180px] items-center px-6 pt-28 pb-16">
+          <div className="grid w-full gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:items-start">
+            <div className="space-y-6">
+              <motion.h2
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={viewportConfig}
+                className="text-4xl font-semibold text-ink sm:text-5xl"
+              >
+                Who We Are
+              </motion.h2>
+              <motion.div
+                variants={staggerContainer(stagger.normal)}
+                initial="hidden"
+                whileInView="visible"
+                viewport={viewportConfig}
+                className="space-y-4"
+              >
+                {aboutParagraphs.map((paragraph) => (
+                  <motion.p
+                    key={paragraph}
+                    variants={fadeUpFast}
+                    className="text-lg leading-relaxed text-muted sm:text-xl"
+                  >
+                    {paragraph}
+                  </motion.p>
+                ))}
+              </motion.div>
+            </div>
+            <VisionPurposeFlow />
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="partners"
+        ref={partnersRef}
+        className="relative isolate min-h-screen overflow-hidden"
+      >
+        <div className="flex min-h-screen flex-col pt-28">
+          <div className="relative h-[30vh] min-h-[200px] w-full flex-shrink-0 overflow-hidden">
+            <Image
+              src="/images/partners/1.jpg"
+              alt=""
+              fill
+              className="object-cover"
+              sizes="100vw"
+            />
+            <div className="absolute inset-0 flex items-center justify-center px-6">
+              <motion.h2
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={viewportConfig}
+                className="text-center text-4xl font-semibold text-paper drop-shadow-[0_12px_30px_rgba(3,7,18,0.55)] sm:text-5xl"
+              >
+                Our Partners
+              </motion.h2>
+            </div>
+          </div>
+          <div
+            data-scrollable
+            className="flex-1 min-h-0 overflow-y-auto bg-paper px-6 py-8"
+          >
+            <div className="mx-auto w-full max-w-[1180px] space-y-8">
+              <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+                {partners.map((partner, index) => (
+                  <motion.div
+                    key={partner.name}
+                    variants={fadeUp}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={viewportConfigPartial}
+                    transition={{
+                      duration: durations.entry,
+                      delay: index * stagger.tight,
+                      ease: PREMIUM_EASE
+                    }}
+                    whileHover={{
+                      y: -2,
+                      transition: { duration: durations.hover, ease: PREMIUM_EASE }
+                    }}
+                    className="flex flex-col"
+                  >
+                    <div className="relative aspect-[3/4] overflow-hidden rounded-2xl border border-rule shadow-[0_18px_40px_rgba(11,27,59,0.16)] transition-all duration-300 hover:border-[color:var(--gold)] hover:shadow-[0_22px_45px_rgba(11,27,59,0.20)]">
+                      <Image
+                        src={partner.image}
+                        alt={partner.name}
+                        fill
+                        className="object-cover"
+                        sizes="(min-width: 1024px) 22vw, (min-width: 640px) 42vw, 80vw"
+                      />
+                    </div>
+                    <motion.p
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      viewport={viewportConfigPartial}
+                      transition={{
+                        duration: durations.entryFast,
+                        delay: index * stagger.tight + 0.1,
+                        ease: PREMIUM_EASE
+                      }}
+                      className="mt-4 text-center text-sm font-semibold uppercase tracking-[0.24em] text-ink"
+                    >
+                      {partner.name}
+                    </motion.p>
+                  </motion.div>
+                ))}
               </div>
             </div>
-            <div
-              data-scrollable
-              className="flex-1 min-h-0 overflow-y-auto bg-paper px-6 py-8"
-            >
-              <div className="mx-auto w-full max-w-[1180px] space-y-8">
-                <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-                  {partners.map((partner, index) => (
-                    <motion.div
-                      key={partner.name}
-                      variants={fadeUp}
+          </div>
+        </div>
+      </section>
+    </>
+  );
+
+  const workPanel = (
+    <>
+      <section
+        id="services"
+        ref={servicesRef}
+        className="relative isolate min-h-screen overflow-hidden"
+      >
+        <div className="absolute inset-0">
+          <Image src="/images/services/1.jpg" alt="" fill className="object-cover" sizes="100vw" />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-b from-[rgba(11,27,59,0.68)] via-[rgba(11,27,59,0.6)] to-[rgba(11,27,59,0.72)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_25%,rgba(176,141,87,0.14),transparent_38%)]" />
+        <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1180px] flex-col px-6 pt-28 pb-16">
+          <div className="flex-shrink-0 space-y-6 text-paper">
+            <div className="max-w-3xl space-y-3">
+              <motion.h2
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={viewportConfig}
+                className="text-4xl font-semibold sm:text-5xl"
+              >
+                What We Do
+              </motion.h2>
+              <motion.p
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={viewportConfig}
+                className="text-lg leading-relaxed text-paper/80 sm:text-xl"
+              >
+                Seamless support across audit, taxation, risk advisory, virtual CFO, and strategic consulting—delivered with the discipline of a heritage practice and the pace of modern business.
+              </motion.p>
+            </div>
+            <div className="flex-1 mt-6">
+              <div className="grid grid-cols-3 gap-4 md:gap-5 lg:gap-6 auto-rows-fr">
+                {services.map((service, index) => {
+                  const isOdd = index % 2 === 0;
+                  return (
+                    <motion.article
+                      key={service.title}
+                      variants={isOdd ? fadeLeft : fadeRight}
                       initial="hidden"
                       whileInView="visible"
                       viewport={viewportConfigPartial}
                       transition={{
                         duration: durations.entry,
-                        delay: index * stagger.tight,
+                        delay: index * stagger.relaxed,
                         ease: PREMIUM_EASE
                       }}
                       whileHover={{
-                        y: -2,
+                        y: -3,
                         transition: { duration: durations.hover, ease: PREMIUM_EASE }
                       }}
-                      className="flex flex-col"
+                      className="group relative flex min-h-[120px] items-center justify-center overflow-hidden rounded-xl border border-[color:var(--rule)] bg-paper/85 p-5 text-center text-ink shadow-[0_20px_45px_rgba(11,27,59,0.18)] transition-shadow duration-300 ease-out hover:border-[color:var(--gold)] hover:shadow-[0_24px_60px_rgba(11,27,59,0.22)]"
                     >
-                      <div className="relative aspect-[3/4] overflow-hidden rounded-2xl border border-rule shadow-[0_18px_40px_rgba(11,27,59,0.16)] transition-all duration-300 hover:border-[color:var(--gold)] hover:shadow-[0_22px_45px_rgba(11,27,59,0.20)]">
-                        <Image
-                          src={partner.image}
-                          alt={partner.name}
-                          fill
-                          className="object-cover"
-                          sizes="(min-width: 1024px) 22vw, (min-width: 640px) 42vw, 80vw"
-                        />
+                      <div className="absolute inset-0 bg-gradient-to-br from-[rgba(11,27,59,0.03)] to-transparent opacity-0 transition duration-300 group-hover:opacity-100" />
+                      <div className="relative">
+                        <h3 className="text-lg font-semibold text-ink">{service.title}</h3>
                       </div>
-                      <motion.p
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        viewport={viewportConfigPartial}
-                        transition={{
-                          duration: durations.entryFast,
-                          delay: index * stagger.tight + 0.1,
-                          ease: PREMIUM_EASE
-                        }}
-                        className="mt-4 text-center text-sm font-semibold uppercase tracking-[0.24em] text-ink"
-                      >
-                        {partner.name}
-                      </motion.p>
-                    </motion.div>
-                  ))}
-                </div>
+                    </motion.article>
+                  );
+                })}
               </div>
             </div>
           </div>
-        </section>
-        <ClientsSection id="clients" ref={clientsRef} />
-        <EnquirySection id="enquiry" ref={enquiryRef} />
-        <FAQSection id="faq" ref={faqRef} />
-        <SectionProgress
-          activeIndex={navActiveIndex}
-          onNavigate={handleSectionNav}
+        </div>
+      </section>
+      <ClientsSection id="clients" ref={clientsRef} />
+    </>
+  );
+
+  const contactPanel = (
+    <>
+      <EnquirySection id="enquiry" ref={enquiryRef} />
+      <FAQSection id="faq" ref={faqRef} />
+    </>
+  );
+
+  return (
+    <>
+      <TopNav
+        activeSection={activePanel}
+        onNavigate={handleNavigate}
+        isVisible={!isOnHome}
+      />
+      <main className="relative">
+        <MainSnapLayout
+          aboutPanel={aboutPanel}
+          workPanel={workPanel}
+          contactPanel={contactPanel}
+          activePanel={activePanel}
+          onPanelChange={handlePanelChange}
+          aboutPanelRef={aboutPanelRef}
+          workPanelRef={workPanelRef}
+          contactPanelRef={contactPanelRef}
+        />
+        <PanelProgress
+          activeIndex={PANEL_NAV_ITEMS.findIndex(p => p.id === activePanel)}
+          onNavigate={handlePanelNav}
           activeSlideIndex={activeSlideIndex}
           setActiveSlideIndex={setActiveSlideIndex}
           landingSlides={landingSlides}
           playfairDisplayClassName={playfairDisplay.className}
+          isOnHome={isOnHome}
         />
       </main>
     </>
   );
 }
 
-function SectionProgress({
+function PanelProgress({
   activeIndex,
   onNavigate,
   activeSlideIndex,
   setActiveSlideIndex,
   landingSlides,
-  playfairDisplayClassName
+  playfairDisplayClassName,
+  isOnHome
 }: {
   activeIndex: number;
-  onNavigate: (item: SectionNavItem, index: number) => void;
+  onNavigate: (index: number) => void;
   activeSlideIndex: number;
   setActiveSlideIndex: (index: number) => void;
   landingSlides: Array<{ src: string; caption: string }>;
   playfairDisplayClassName: string;
+  isOnHome: boolean;
 }) {
-  const isOnHome = activeIndex === 0;
-
   return (
     <div className="pointer-events-none fixed bottom-8 left-1/2 z-40 flex -translate-x-1/2 flex-col items-center justify-center gap-3">
       {isOnHome && (
@@ -639,12 +574,12 @@ function SectionProgress({
           Sections
         </span>
         <div className="h-px w-12 bg-[color:var(--rule)]" aria-hidden />
-        <div className="flex max-w-[140px] items-center gap-2 overflow-x-auto pr-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:max-w-none md:overflow-visible">
-          {SECTION_NAV_ITEMS.map((item, index) => (
+        <div className="flex items-center gap-2">
+          {PANEL_NAV_ITEMS.map((item, index) => (
             <motion.button
               key={item.id}
               type="button"
-              onClick={() => onNavigate(item, index)}
+              onClick={() => onNavigate(index)}
               animate={{
                 backgroundColor: activeIndex === index ? "rgb(11, 27, 59)" : "transparent",
                 borderColor: activeIndex === index ? "rgb(11, 27, 59)" : "rgba(11, 27, 59, 0.18)",

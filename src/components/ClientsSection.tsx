@@ -1,5 +1,9 @@
+"use client";
+
 import Image from "next/image";
 import { forwardRef } from "react";
+import { motion } from "framer-motion";
+import { fadeUp, fadeUpFast, viewportConfig, viewportConfigPartial, durations, stagger, PREMIUM_EASE } from "@/lib/motion";
 
 import clients from "../../data/clients.json";
 
@@ -30,30 +34,48 @@ export const ClientsSection = forwardRef<HTMLElement, ClientsSectionProps>(
             <div className="absolute inset-0 bg-ink/55" />
             <div className="absolute inset-0 bg-gradient-to-b from-ink/40 via-ink/55 to-ink/70" />
             <div className="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center">
-              <h1 className="font-heading text-4xl font-semibold text-paper sm:text-5xl lg:text-6xl">
+              <motion.h1
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={viewportConfig}
+                className="font-heading text-4xl font-semibold text-paper sm:text-5xl lg:text-6xl"
+              >
                 Our Clients
-              </h1>
+              </motion.h1>
             </div>
           </div>
 
           <div className="flex-1 min-h-0 overflow-y-auto bg-paper py-12">
             <div className="mx-auto w-full max-w-[1180px] px-6">
               <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:grid-cols-4">
-                {(clients as Client[]).map((client) => (
-                  <div key={client.id} className="flex flex-col items-center text-center">
-                    <div className="flex h-24 w-full items-center justify-center">
+                {(clients as Client[]).map((client, index) => (
+                  <motion.div
+                    key={client.id}
+                    variants={fadeUpFast}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={viewportConfigPartial}
+                    transition={{
+                      duration: durations.entry,
+                      delay: index * 0.05,
+                      ease: PREMIUM_EASE
+                    }}
+                    className="flex flex-col items-center text-center"
+                  >
+                    <div className="flex h-24 w-full items-center justify-center group">
                       <Image
                         src={`/images/clients/${client.id}/1.jpg`}
                         alt={client.name ? `${client.name} logo` : "Client logo"}
                         width={200}
                         height={120}
-                        className="h-16 w-auto object-contain transition duration-300 ease-out hover:scale-105"
+                        className="h-16 w-auto object-contain transition-all duration-300 ease-out group-hover:opacity-70"
                       />
                     </div>
                     {client.name ? (
                       <p className="mt-3 text-sm font-medium text-ink/70">{client.name}</p>
                     ) : null}
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             </div>

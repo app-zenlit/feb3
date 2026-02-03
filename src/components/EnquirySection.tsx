@@ -3,6 +3,8 @@
 import Image from "next/image";
 import type { ChangeEvent, FormEvent } from "react";
 import { forwardRef, useState } from "react";
+import { motion } from "framer-motion";
+import { fadeUp, fadeUpFast, staggerContainer, viewportConfig, stagger } from "@/lib/motion";
 
 import contact from "../../data/contact.json";
 
@@ -61,7 +63,13 @@ export const EnquirySection = forwardRef<HTMLElement, EnquirySectionProps>(
         <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1180px] items-center px-6 pt-28 pb-16 overflow-y-auto">
           <div className="w-full rounded-2xl border border-[color:var(--rule)] bg-paper/85 p-8 shadow-[0_24px_60px_rgba(11,27,59,0.25)] backdrop-blur sm:p-12">
             <div className="grid gap-10 md:grid-cols-2 md:gap-12">
-              <div className="space-y-6">
+              <motion.div
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={viewportConfig}
+                className="space-y-6"
+              >
                 <div className="flex items-center gap-3 text-[0.7rem] uppercase tracking-[0.42em] text-muted">
                   <span
                     className="inline-block h-px w-8 bg-[color:var(--gold)]"
@@ -111,10 +119,17 @@ export const EnquirySection = forwardRef<HTMLElement, EnquirySectionProps>(
                     </a>
                   </div>
                 </div>
-              </div>
+              </motion.div>
 
-              <form className="space-y-4" onSubmit={handleSubmit}>
-                <div className="space-y-1">
+              <motion.form
+                variants={staggerContainer(stagger.normal)}
+                initial="hidden"
+                whileInView="visible"
+                viewport={viewportConfig}
+                className="space-y-4"
+                onSubmit={handleSubmit}
+              >
+                <motion.div variants={fadeUpFast} className="space-y-1">
                   <label className="text-xs font-semibold uppercase tracking-[0.28em] text-ink">
                     Name
                   </label>
@@ -124,10 +139,10 @@ export const EnquirySection = forwardRef<HTMLElement, EnquirySectionProps>(
                     onChange={handleChange}
                     required
                     placeholder="Your name"
-                    className="w-full rounded-lg border border-[color:var(--rule)] bg-white/90 px-4 py-3 text-sm text-ink placeholder:text-muted shadow-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--gold)]"
+                    className="w-full rounded-lg border border-[color:var(--rule)] bg-white/90 px-4 py-3 text-sm text-ink placeholder:text-muted shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[color:var(--gold)] focus:shadow-[0_0_0_3px_rgba(176,141,87,0.1)]"
                   />
-                </div>
-                <div className="space-y-1">
+                </motion.div>
+                <motion.div variants={fadeUpFast} className="space-y-1">
                   <label className="text-xs font-semibold uppercase tracking-[0.28em] text-ink">
                     Email
                   </label>
@@ -138,10 +153,10 @@ export const EnquirySection = forwardRef<HTMLElement, EnquirySectionProps>(
                     onChange={handleChange}
                     required
                     placeholder="you@example.com"
-                    className="w-full rounded-lg border border-[color:var(--rule)] bg-white/90 px-4 py-3 text-sm text-ink placeholder:text-muted shadow-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--gold)]"
+                    className="w-full rounded-lg border border-[color:var(--rule)] bg-white/90 px-4 py-3 text-sm text-ink placeholder:text-muted shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[color:var(--gold)] focus:shadow-[0_0_0_3px_rgba(176,141,87,0.1)]"
                   />
-                </div>
-                <div className="space-y-1">
+                </motion.div>
+                <motion.div variants={fadeUpFast} className="space-y-1">
                   <label className="text-xs font-semibold uppercase tracking-[0.28em] text-ink">
                     Category
                   </label>
@@ -149,7 +164,7 @@ export const EnquirySection = forwardRef<HTMLElement, EnquirySectionProps>(
                     name="category"
                     value={formData.category}
                     onChange={handleChange}
-                    className="w-full rounded-lg border border-[color:var(--rule)] bg-white/90 px-4 py-3 text-sm text-ink shadow-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--gold)]"
+                    className="w-full rounded-lg border border-[color:var(--rule)] bg-white/90 px-4 py-3 text-sm text-ink shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[color:var(--gold)] focus:shadow-[0_0_0_3px_rgba(176,141,87,0.1)]"
                   >
                     <option value="" disabled>
                       Select an option
@@ -159,8 +174,8 @@ export const EnquirySection = forwardRef<HTMLElement, EnquirySectionProps>(
                     <option value="feedback">Feedback</option>
                     <option value="careers">Careers</option>
                   </select>
-                </div>
-                <div className="space-y-1">
+                </motion.div>
+                <motion.div variants={fadeUpFast} className="space-y-1">
                   <label className="text-xs font-semibold uppercase tracking-[0.28em] text-ink">
                     Message
                   </label>
@@ -170,16 +185,20 @@ export const EnquirySection = forwardRef<HTMLElement, EnquirySectionProps>(
                     onChange={handleChange}
                     rows={5}
                     placeholder="Tell us about your enquiry..."
-                    className="w-full resize-none rounded-lg border border-[color:var(--rule)] bg-white/90 px-4 py-3 text-sm text-ink placeholder:text-muted shadow-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--gold)]"
+                    className="w-full resize-none rounded-lg border border-[color:var(--rule)] bg-white/90 px-4 py-3 text-sm text-ink placeholder:text-muted shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[color:var(--gold)] focus:shadow-[0_0_0_3px_rgba(176,141,87,0.1)]"
                   />
-                </div>
-                <button
+                </motion.div>
+                <motion.button
+                  variants={fadeUpFast}
                   type="submit"
-                  className="inline-flex items-center justify-center rounded-full border border-ink bg-ink px-6 py-3 text-xs font-semibold uppercase tracking-[0.3em] text-paper shadow-[0_18px_40px_rgba(11,27,59,0.2)] transition hover:-translate-y-0.5 hover:shadow-[0_22px_45px_rgba(11,27,59,0.25)]"
+                  whileHover={{ y: -2 }}
+                  transition={{ duration: 0.2 }}
+                  className="group inline-flex items-center justify-center gap-2 rounded-full border border-ink bg-ink px-6 py-3 text-xs font-semibold uppercase tracking-[0.3em] text-paper shadow-[0_18px_40px_rgba(11,27,59,0.2)] transition-shadow hover:shadow-[0_22px_45px_rgba(11,27,59,0.25)]"
                 >
                   Send
-                </button>
-              </form>
+                  <span className="inline-block transition-transform duration-200 group-hover:translate-x-1">→</span>
+                </motion.button>
+              </motion.form>
             </div>
           </div>
         </div>

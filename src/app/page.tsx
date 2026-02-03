@@ -10,6 +10,7 @@ import { ClientsSection } from "@/components/ClientsSection";
 import { EnquirySection } from "@/components/EnquirySection";
 import { FAQSection } from "@/components/FAQSection";
 import { TopNav } from "@/components/TopNav";
+import { fadeUp, fadeUpFast, fadeLeft, fadeRight, staggerContainer, scaleYReveal, viewportConfig, viewportConfigPartial, stagger, durations, PREMIUM_EASE } from "@/lib/motion";
 
 type SectionId =
   | "home"
@@ -396,47 +397,75 @@ export default function HomePage() {
           <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1180px] items-center px-6 pt-28 pb-16">
             <div className="grid w-full gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:items-start">
               <div className="space-y-6">
-                <h2 data-animate className="text-4xl font-semibold text-ink sm:text-5xl">
+                <motion.h2
+                  variants={fadeUp}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={viewportConfig}
+                  className="text-4xl font-semibold text-ink sm:text-5xl"
+                >
                   Who We Are
-                </h2>
-                <div className="space-y-4">
-                  {aboutParagraphs.map((paragraph) => (
-                    <p
+                </motion.h2>
+                <motion.div
+                  variants={staggerContainer(stagger.normal)}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={viewportConfig}
+                  className="space-y-4"
+                >
+                  {aboutParagraphs.map((paragraph, index) => (
+                    <motion.p
                       key={paragraph}
-                      data-animate
+                      variants={fadeUpFast}
                       className="text-lg leading-relaxed text-muted sm:text-xl"
                     >
                       {paragraph}
-                    </p>
+                    </motion.p>
                   ))}
-                </div>
+                </motion.div>
               </div>
-              <div
-                data-animate
+              <motion.div
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={viewportConfig}
                 className="relative rounded-2xl border border-rule bg-paper/80 p-8 shadow-[0_24px_60px_rgba(11,27,59,0.12)] backdrop-blur"
               >
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[rgba(11,27,59,0.04)] to-transparent" />
+                <motion.div
+                  className="absolute left-0 top-0 bottom-0 w-px bg-[color:var(--gold)] origin-top"
+                  variants={scaleYReveal}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={viewportConfig}
+                />
                 <div className="relative space-y-5">
                   <p className="text-xs uppercase tracking-[0.38em] text-muted">
                     Pillars
                   </p>
                   <h3 className="text-3xl font-semibold text-ink">Quality • Integrity • Trust</h3>
-                  <ul className="space-y-2 text-base leading-relaxed text-muted">
-                    <li className="flex items-start gap-3">
+                  <motion.ul
+                    variants={staggerContainer(0.09)}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={viewportConfig}
+                    className="space-y-2 text-base leading-relaxed text-muted"
+                  >
+                    <motion.li variants={fadeUpFast} className="flex items-start gap-3">
                       <span className="mt-1 h-px w-6 shrink-0 bg-[color:var(--gold)]" aria-hidden />
                       Precision in every mandate, anchored in ethics.
-                    </li>
-                    <li className="flex items-start gap-3">
+                    </motion.li>
+                    <motion.li variants={fadeUpFast} className="flex items-start gap-3">
                       <span className="mt-1 h-px w-6 shrink-0 bg-[color:var(--gold)]" aria-hidden />
                       Stewardship built on discretion and clarity.
-                    </li>
-                    <li className="flex items-start gap-3">
+                    </motion.li>
+                    <motion.li variants={fadeUpFast} className="flex items-start gap-3">
                       <span className="mt-1 h-px w-6 shrink-0 bg-[color:var(--gold)]" aria-hidden />
                       Guidance that honors legacy while embracing progress.
-                    </li>
-                  </ul>
+                    </motion.li>
+                  </motion.ul>
                 </div>
-              </div>
+              </motion.div>
             </div>
           </div>
         </section>
@@ -454,27 +483,52 @@ export default function HomePage() {
           <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1180px] flex-col px-6 pt-28 pb-16">
             <div className="flex-shrink-0 space-y-6 text-paper">
               <div className="max-w-3xl space-y-3">
-                <h2 data-animate className="text-4xl font-semibold sm:text-5xl">
+                <motion.h2
+                  variants={fadeUp}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={viewportConfig}
+                  className="text-4xl font-semibold sm:text-5xl"
+                >
                   What We Do
-                </h2>
-                <p data-animate className="text-lg leading-relaxed text-paper/80 sm:text-xl">
+                </motion.h2>
+                <motion.p
+                  variants={fadeUp}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={viewportConfig}
+                  className="text-lg leading-relaxed text-paper/80 sm:text-xl"
+                >
                   Seamless support across audit, taxation, risk advisory, virtual CFO, and strategic consulting—delivered with the discipline of a heritage practice and the pace of modern business.
-                </p>
+                </motion.p>
               </div>
               <div className="flex-1 mt-6">
                 <div className="grid grid-cols-3 gap-4 md:gap-5 lg:gap-6 auto-rows-fr">
                   {services.map((service, index) => {
+                    const isOdd = index % 2 === 0;
                     return (
-                      <article
+                      <motion.article
                         key={service.title}
-                        data-animate
-                        className="group relative flex min-h-[120px] items-center justify-center overflow-hidden rounded-xl border border-[color:var(--rule)] bg-paper/85 p-5 text-center text-ink shadow-[0_20px_45px_rgba(11,27,59,0.18)] transition duration-300 ease-out hover:-translate-y-0.5 hover:border-paper hover:shadow-[0_24px_60px_rgba(11,27,59,0.22)]"
+                        variants={isOdd ? fadeLeft : fadeRight}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={viewportConfigPartial}
+                        transition={{
+                          duration: durations.entry,
+                          delay: index * stagger.relaxed,
+                          ease: PREMIUM_EASE
+                        }}
+                        whileHover={{
+                          y: -3,
+                          transition: { duration: durations.hover, ease: PREMIUM_EASE }
+                        }}
+                        className="group relative flex min-h-[120px] items-center justify-center overflow-hidden rounded-xl border border-[color:var(--rule)] bg-paper/85 p-5 text-center text-ink shadow-[0_20px_45px_rgba(11,27,59,0.18)] transition-shadow duration-300 ease-out hover:border-[color:var(--gold)] hover:shadow-[0_24px_60px_rgba(11,27,59,0.22)]"
                       >
                         <div className="absolute inset-0 bg-gradient-to-br from-[rgba(11,27,59,0.03)] to-transparent opacity-0 transition duration-300 group-hover:opacity-100" />
                         <div className="relative">
                           <h3 className="text-lg font-semibold text-ink">{service.title}</h3>
                         </div>
-                      </article>
+                      </motion.article>
                     );
                   })}
                 </div>
@@ -501,11 +555,10 @@ export default function HomePage() {
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_25%,rgba(176,141,87,0.18),transparent_40%)]" />
               <div className="absolute inset-0 flex items-center justify-center px-6">
                 <motion.h2
-                  data-animate
-                  initial={{ opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.6 }}
-                  transition={{ duration: 0.6, ease: "easeOut" }}
+                  variants={fadeUp}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={viewportConfig}
                   className="text-center text-4xl font-semibold text-paper drop-shadow-[0_12px_30px_rgba(3,7,18,0.55)] sm:text-5xl"
                 >
                   Our Partners
@@ -521,13 +574,22 @@ export default function HomePage() {
                   {partners.map((partner, index) => (
                     <motion.div
                       key={partner.name}
-                      initial={{ opacity: 0, y: 24 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true, amount: 0.35 }}
-                      transition={{ duration: 0.5, delay: index * 0.08, ease: "easeOut" }}
+                      variants={fadeUp}
+                      initial="hidden"
+                      whileInView="visible"
+                      viewport={viewportConfigPartial}
+                      transition={{
+                        duration: durations.entry,
+                        delay: index * stagger.tight,
+                        ease: PREMIUM_EASE
+                      }}
+                      whileHover={{
+                        y: -2,
+                        transition: { duration: durations.hover, ease: PREMIUM_EASE }
+                      }}
                       className="flex flex-col"
                     >
-                      <div className="relative aspect-[3/4] overflow-hidden rounded-2xl border border-rule bg-paper shadow-[0_18px_40px_rgba(11,27,59,0.16)]">
+                      <div className="relative aspect-[3/4] overflow-hidden rounded-2xl border border-rule bg-paper shadow-[0_18px_40px_rgba(11,27,59,0.16)] transition-all duration-300 hover:border-[color:var(--gold)] hover:shadow-[0_22px_45px_rgba(11,27,59,0.20)]">
                         <Image
                           src={partner.image}
                           alt={partner.name}
@@ -536,9 +598,19 @@ export default function HomePage() {
                           sizes="(min-width: 1024px) 22vw, (min-width: 640px) 42vw, 80vw"
                         />
                       </div>
-                      <p className="mt-4 text-center text-sm font-semibold uppercase tracking-[0.24em] text-ink">
+                      <motion.p
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={viewportConfigPartial}
+                        transition={{
+                          duration: durations.entryFast,
+                          delay: index * stagger.tight + 0.1,
+                          ease: PREMIUM_EASE
+                        }}
+                        className="mt-4 text-center text-sm font-semibold uppercase tracking-[0.24em] text-ink"
+                      >
                         {partner.name}
-                      </p>
+                      </motion.p>
                     </motion.div>
                   ))}
                 </div>
@@ -611,22 +683,35 @@ function SectionProgress({
         <div className="h-px w-12 bg-[color:var(--rule)]" aria-hidden />
         <div className="flex max-w-[140px] items-center gap-2 overflow-x-auto pr-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:max-w-none md:overflow-visible">
           {SECTION_NAV_ITEMS.map((item, index) => (
-            <button
+            <motion.button
               key={item.id}
               type="button"
               onClick={() => onNavigate(item, index)}
-              className={`pointer-events-auto group relative flex h-8 w-8 items-center justify-center rounded-full border transition ${
-                activeIndex === index
-                  ? "border-ink bg-ink text-paper shadow-[0_12px_30px_rgba(11,27,59,0.25)]"
-                  : "border-[color:var(--rule)] text-muted hover:border-ink hover:text-ink"
-              }`}
+              animate={{
+                backgroundColor: activeIndex === index ? "rgb(11, 27, 59)" : "transparent",
+                borderColor: activeIndex === index ? "rgb(11, 27, 59)" : "rgba(11, 27, 59, 0.18)",
+                color: activeIndex === index ? "rgb(251, 248, 242)" : "rgb(58, 74, 106)",
+                scale: activeIndex === index ? 1.0 : 1,
+              }}
+              whileHover={{
+                borderColor: "rgb(11, 27, 59)",
+                color: "rgb(11, 27, 59)",
+              }}
+              transition={{
+                duration: 0.4,
+                ease: PREMIUM_EASE
+              }}
+              className="pointer-events-auto group relative flex h-8 w-8 items-center justify-center rounded-full border shadow-[0_12px_30px_rgba(11,27,59,0.25)]"
+              style={{
+                boxShadow: activeIndex === index ? "0 12px 30px rgba(11, 27, 59, 0.25)" : "none"
+              }}
               aria-label={item.label}
             >
               <span className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white/90 px-2 py-1 text-[0.65rem] text-[#333] opacity-0 shadow-sm transition-opacity duration-200 group-hover:opacity-100">
                 {item.label}
               </span>
               {ROMAN_NUMERALS[index] ?? `${index + 1}`}
-            </button>
+            </motion.button>
           ))}
         </div>
       </div>

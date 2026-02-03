@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { motion } from "framer-motion";
+import { navItemVariants } from "@/lib/motion";
 
 type NavItem = { label: string; href: string };
 
@@ -25,8 +27,13 @@ export function TopNav({
   isVisible?: boolean;
 }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [hasLoaded, setHasLoaded] = useState(false);
   const pathname = usePathname();
   const isLandingPage = pathname === "/";
+
+  useEffect(() => {
+    setHasLoaded(true);
+  }, []);
 
   useEffect(() => {
     if (isMobileMenuOpen) {
@@ -57,7 +64,7 @@ export function TopNav({
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-40 border-b border-rule bg-paper/70 backdrop-blur-md transition-all duration-300 ${
-      isVisible ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0 pointer-events-none"
+      isVisible ? "translate-y-0 opacity-100 shadow-[0_4px_16px_rgba(11,27,59,0.08)]" : "-translate-y-full opacity-0 pointer-events-none shadow-none"
     }`}>
       <div className="mx-auto flex w-full max-w-[1180px] items-center justify-between gap-6 px-6 py-5">
         <div className="flex flex-wrap items-center gap-3">
@@ -80,19 +87,30 @@ export function TopNav({
 
         {/* Desktop Navigation */}
         <nav className="hidden lg:flex items-center gap-6 text-xs uppercase tracking-[0.3em] text-ink">
-          {NAV_ITEMS.map((item) => (
-            <a
+          {NAV_ITEMS.map((item, index) => (
+            <motion.div
               key={item.href}
-              href={getHref(item.href)}
-              onClick={(e) => handleNavClick(e, item.href)}
-              className={`pb-1 transition hover:text-ink ${
-                activeSection === item.href.replace("#", "")
-                  ? "border-b border-ink"
-                  : "border-b border-transparent text-muted"
-              }`}
+              variants={navItemVariants}
+              initial="hidden"
+              animate={hasLoaded ? "visible" : "hidden"}
+              custom={index}
             >
-              {item.label}
-            </a>
+              <a
+                href={getHref(item.href)}
+                onClick={(e) => handleNavClick(e, item.href)}
+                className="relative pb-1 text-muted transition-colors duration-200 hover:text-ink group"
+              >
+                {item.label}
+                <span
+                  className={`absolute bottom-0 left-0 h-px bg-ink transition-all duration-250 origin-left ${
+                    activeSection === item.href.replace("#", "")
+                      ? "w-full"
+                      : "w-0 group-hover:w-full"
+                  }`}
+                  style={{ transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)" }}
+                />
+              </a>
+            </motion.div>
           ))}
         </nav>
 

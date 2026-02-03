@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 import { forwardRef, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { fadeUp, fadeUpFast, viewportConfig, viewportConfigPartial, durations, stagger, PREMIUM_EASE } from "@/lib/motion";
 
 import faqs from "../../data/faqs.json";
 
@@ -40,7 +42,13 @@ export const FAQSection = forwardRef<HTMLElement, FAQSectionProps>(
         </div>
 
         <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1180px] flex-col px-6 pb-16 pt-28 overflow-y-auto">
-          <div className="text-left text-paper">
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportConfig}
+            className="text-left text-paper"
+          >
             <div className="mb-4 inline-flex items-center gap-3 text-[0.7rem] uppercase tracking-[0.42em] text-paper/75">
               <span className="inline-block h-px w-8 bg-[color:var(--gold)]" aria-hidden />
               Insights
@@ -51,14 +59,23 @@ export const FAQSection = forwardRef<HTMLElement, FAQSectionProps>(
             <p className="mt-3 text-sm text-paper/75 sm:text-base">
               Clear answers to common questions about our services and process.
             </p>
-          </div>
+          </motion.div>
 
           <div className="mt-12 w-full max-w-3xl space-y-5">
             {(faqs as FAQItem[]).map((faq, index) => {
               const isExpanded = expandedIndex === index;
               return (
-                <div
+                <motion.div
                   key={faq.question}
+                  variants={fadeUpFast}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={viewportConfigPartial}
+                  transition={{
+                    duration: durations.entry,
+                    delay: index * stagger.normal,
+                    ease: PREMIUM_EASE
+                  }}
                   className="rounded-2xl border border-[color:var(--rule)] bg-paper/85 p-6 shadow-[0_20px_45px_rgba(11,27,59,0.18)] backdrop-blur"
                 >
                   <button
@@ -69,27 +86,38 @@ export const FAQSection = forwardRef<HTMLElement, FAQSectionProps>(
                     aria-controls={`faq-answer-${index}`}
                   >
                     <span>{faq.question}</span>
-                    <span
-                      className="flex h-8 w-8 items-center justify-center rounded-full border border-[color:var(--rule)] text-xl"
+                    <motion.span
+                      animate={{ rotate: isExpanded ? 180 : 0 }}
+                      transition={{ duration: durations.accordion, ease: PREMIUM_EASE }}
+                      className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-[color:var(--rule)] text-xl"
                       aria-hidden
                     >
-                      {isExpanded ? "−" : "+"}
-                    </span>
+                      +
+                    </motion.span>
                   </button>
-                  <div
-                    id={`faq-answer-${index}`}
-                    className={`grid transition-all duration-300 ease-out ${
-                      isExpanded ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
-                    }`}
-                    aria-hidden={!isExpanded}
-                  >
-                    <div className="overflow-hidden">
-                      <p className="mt-4 text-sm leading-relaxed text-muted sm:text-base">
-                        {faq.answer}
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                  <AnimatePresence initial={false}>
+                    {isExpanded && (
+                      <motion.div
+                        id={`faq-answer-${index}`}
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: durations.accordion, ease: PREMIUM_EASE }}
+                        className="overflow-hidden"
+                      >
+                        <motion.p
+                          initial={{ y: -6, opacity: 0 }}
+                          animate={{ y: 0, opacity: 1 }}
+                          exit={{ y: -6, opacity: 0 }}
+                          transition={{ duration: durations.accordion, ease: PREMIUM_EASE }}
+                          className="mt-4 text-sm leading-relaxed text-muted sm:text-base"
+                        >
+                          {faq.answer}
+                        </motion.p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
               );
             })}
           </div>

@@ -3,11 +3,12 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { ReactNode } from "react";
+import { durations, PREMIUM_EASE } from "@/lib/motion";
 
 const transitionVariants = {
-  initial: { opacity: 0, y: 12 },
-  animate: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -12 }
+  initial: { opacity: 0.96 },
+  animate: { opacity: 1 },
+  exit: { opacity: 0.96 }
 };
 
 export function RouteTransition({ children }: { children: ReactNode }) {
@@ -21,7 +22,7 @@ export function RouteTransition({ children }: { children: ReactNode }) {
         initial="initial"
         animate="animate"
         exit="exit"
-        transition={{ duration: 0.5, ease: "easeOut" }}
+        transition={{ duration: durations.page, ease: PREMIUM_EASE }}
       >
         {children}
       </motion.div>

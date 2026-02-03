@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
-import gsap from "gsap";
 import { Playfair_Display } from "next/font/google";
 import { motion } from "framer-motion";
 import { partners } from "@/content/partners";
@@ -191,7 +190,6 @@ export default function HomePage() {
   const clientsRef = useRef<HTMLElement | null>(null);
   const enquiryRef = useRef<HTMLElement | null>(null);
   const faqRef = useRef<HTMLElement | null>(null);
-  const heroBgRef = useRef<HTMLDivElement | null>(null);
 
   const [navActiveIndex, setNavActiveIndex] = useState(0);
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
@@ -323,18 +321,6 @@ export default function HomePage() {
     };
   }, [getNearestSectionIndex, navActiveIndex]);
 
-  useEffect(() => {
-    const prefersMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-
-    if (!prefersMotion.matches && heroBgRef.current) {
-      gsap.fromTo(
-        heroBgRef.current,
-        { scale: 1.05 },
-        { scale: 1, duration: 1.1, ease: "power2.out" }
-      );
-    }
-  }, []);
-
   return (
     <>
       <TopNav
@@ -349,8 +335,7 @@ export default function HomePage() {
           className="relative isolate min-h-screen overflow-hidden"
         >
           <div
-            ref={heroBgRef}
-            className="absolute inset-0"
+            className="absolute inset-0 hero-bg-motion"
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
@@ -382,10 +367,17 @@ export default function HomePage() {
                 <span className="inline-block h-px w-8 bg-[color:var(--gold)]" aria-hidden />
                 Chartered Accountants
               </div>
-              <h1 data-animate className="text-5xl font-semibold sm:text-6xl md:text-7xl">
+              <h1
+                data-animate
+                className="hero-title text-5xl font-semibold sm:text-6xl md:text-7xl"
+              >
                 Nathan &amp; Co.
               </h1>
-              <p data-animate className="max-w-xl text-xl leading-relaxed text-paper/85">
+              <div className="hero-divider" aria-hidden />
+              <p
+                data-animate
+                className="hero-tagline max-w-xl text-xl leading-relaxed text-paper/85"
+              >
                 Upholding the highest ideals of quality, integrity, and trust.
               </p>
             </div>
@@ -469,74 +461,18 @@ export default function HomePage() {
                   Seamless support across audit, taxation, risk advisory, virtual CFO, and strategic consulting—delivered with the discipline of a heritage practice and the pace of modern business.
                 </p>
               </div>
-              <div
-                data-scrollable
-                className="flex-1 min-h-0 overflow-y-auto pr-2 mt-6"
-              >
-                <div className="grid gap-4 md:gap-5 lg:gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 auto-rows-fr">
+              <div className="flex-1 mt-6">
+                <div className="grid grid-cols-3 gap-4 md:gap-5 lg:gap-6 auto-rows-fr">
                   {services.map((service, index) => {
-                    const isLarge = index === 0 || index === 3;
                     return (
                       <article
                         key={service.title}
                         data-animate
-                        className={`group relative overflow-hidden rounded-xl border border-[color:var(--rule)] bg-paper/85 p-5 text-ink shadow-[0_20px_45px_rgba(11,27,59,0.18)] transition duration-300 ease-out hover:-translate-y-0.5 hover:border-paper hover:shadow-[0_24px_60px_rgba(11,27,59,0.22)] ${
-                          isLarge ? 'md:col-span-2 lg:col-span-2' : ''
-                        }`}
+                        className="group relative flex min-h-[120px] items-center justify-center overflow-hidden rounded-xl border border-[color:var(--rule)] bg-paper/85 p-5 text-center text-ink shadow-[0_20px_45px_rgba(11,27,59,0.18)] transition duration-300 ease-out hover:-translate-y-0.5 hover:border-paper hover:shadow-[0_24px_60px_rgba(11,27,59,0.22)]"
                       >
                         <div className="absolute inset-0 bg-gradient-to-br from-[rgba(11,27,59,0.03)] to-transparent opacity-0 transition duration-300 group-hover:opacity-100" />
-                        <div className="relative space-y-3">
-                          <div className="flex items-center gap-3">
-                            <span className="flex h-8 w-8 items-center justify-center rounded-full border border-[color:var(--rule)] bg-paper/70 text-sm font-semibold text-ink">
-                              {index + 1}
-                            </span>
-                            <h3 className="text-lg font-semibold text-ink">{service.title}</h3>
-                          </div>
-                          <div className="space-y-2 text-sm leading-relaxed text-muted line-clamp-4">
-                            {service.body.split("\n").slice(0, 1).map((chunk) => (
-                              <p key={chunk}>{chunk}</p>
-                            ))}
-                          </div>
-                          {service.bullets && (
-                            <ul className="space-y-1.5 text-xs leading-relaxed text-ink">
-                              {service.bullets.slice(0, 3).map((item) => (
-                                <li
-                                  key={item}
-                                  className="flex items-start gap-2 rounded-lg border border-transparent px-2 py-1 transition group-hover:border-[color:var(--rule)]"
-                                >
-                                  <span className="mt-[5px] inline-block h-[7px] w-[7px] rounded-full border border-[color:var(--rule)] bg-[color:var(--paper)]" aria-hidden />
-                                  <span>{item}</span>
-                                </li>
-                              ))}
-                              {service.bullets.length > 3 && (
-                                <li className="px-2 py-1 text-muted/60">
-                                  +{service.bullets.length - 3} more
-                                </li>
-                              )}
-                            </ul>
-                          )}
-                          {service.subSections && (
-                            <div className="space-y-3">
-                              {service.subSections.slice(0, 1).map((sub) => (
-                                <div key={sub.title} className="space-y-1.5">
-                                  <p className="text-[0.65rem] uppercase tracking-[0.26em] text-muted">
-                                    {sub.title}
-                                  </p>
-                                  <ul className="space-y-1.5 text-xs leading-relaxed text-ink">
-                                    {sub.bullets.slice(0, 3).map((item) => (
-                                      <li
-                                        key={item}
-                                        className="flex items-start gap-2 rounded-lg border border-transparent px-2 py-1 transition group-hover:border-[color:var(--rule)]"
-                                      >
-                                        <span className="mt-[5px] inline-block h-[7px] w-[7px] rounded-full border border-[color:var(--rule)] bg-[color:var(--paper)]" aria-hidden />
-                                        <span>{item}</span>
-                                      </li>
-                                    ))}
-                                  </ul>
-                                </div>
-                              ))}
-                            </div>
-                          )}
+                        <div className="relative">
+                          <h3 className="text-lg font-semibold text-ink">{service.title}</h3>
                         </div>
                       </article>
                     );

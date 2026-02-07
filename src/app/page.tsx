@@ -5,7 +5,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Playfair_Display } from "next/font/google";
 import { motion } from "framer-motion";
 import { servicesData } from "@/content/services";
-import { SECTION_ITEMS } from "@/content/sections";
 import { EnquirySection } from "@/components/EnquirySection";
 import { FAQSection } from "@/components/FAQSection";
 import { TopNav } from "@/components/TopNav";
@@ -155,7 +154,7 @@ const services = [
 ];
 
 export default function HomePage() {
-  const [activeSection, setActiveSection] = useState<string>("home");
+  const [activeSection, setActiveSection] = useState<SectionId>("home");
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
   const [isServiceModalOpen, setIsServiceModalOpen] = useState(false);
   const [activeServiceId, setActiveServiceId] = useState<string | null>(null);
@@ -170,27 +169,39 @@ export default function HomePage() {
   const servicesRef = useRef<HTMLElement | null>(null);
   const enquiryRef = useRef<HTMLElement | null>(null);
   const faqRef = useRef<HTMLElement | null>(null);
-  const sections = useMemo(() => SECTION_ITEMS, []);
-
   const sectionRefs = useMemo(
-    () => ({
-      home: homeRef,
-      about: aboutRef,
-      services: servicesRef,
-      enquiry: enquiryRef,
-      faq: faqRef
-    }),
+    () =>
+      ({
+        home: homeRef,
+        about: aboutRef,
+        services: servicesRef,
+        enquiry: enquiryRef,
+        faq: faqRef
+      } as const),
     []
   );
 
+  type SectionId = keyof typeof sectionRefs;
+  type Section = { id: SectionId; name: string; numeral: string };
+
+  const SECTION_ITEMS = [
+    { id: "home", name: "Home", numeral: "I" },
+    { id: "about", name: "Who We Are", numeral: "II" },
+    { id: "services", name: "What We Do", numeral: "III" },
+    { id: "enquiry", name: "Start an Enquiry", numeral: "IV" },
+    { id: "faq", name: "Frequently Asked Questions", numeral: "V" }
+  ] satisfies ReadonlyArray<Section>;
+
+  const sections = useMemo<Section[]>(() => SECTION_ITEMS, []);
+
   const sectionMeta = useMemo(
     () =>
-      sections.reduce<Record<string, { id: string; name: string; numeral: string }>>(
+      sections.reduce<Record<SectionId, Section>>(
         (acc, section) => {
           acc[section.id] = section;
           return acc;
         },
-        {}
+        {} as Record<SectionId, Section>
       ),
     [sections]
   );
@@ -270,7 +281,9 @@ export default function HomePage() {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           const sectionId = entry.target.id;
-          setActiveSection(sectionId);
+          if (sectionId in sectionRefs) {
+            setActiveSection(sectionId as SectionId);
+          }
         }
       });
     };

@@ -43,7 +43,7 @@ export const FAQSection = forwardRef<HTMLElement, FAQSectionProps>(
       >
         {sectionLabel ? <span className="sr-only">{sectionLabel}</span> : null}
 
-        <div className="relative z-10 mx-auto flex w-full max-w-[1180px] flex-col px-6 section-shell !h-auto min-h-[calc(100vh-var(--nav-h))] !pt-4 !pb-6">
+        <div className="relative z-10 mx-auto flex w-full max-w-[1180px] flex-col px-6 section-shell min-h-[calc(100vh-var(--nav-h))]">
           <motion.div
             variants={fadeUp}
             {...sectionReveal}

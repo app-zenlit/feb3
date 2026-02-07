@@ -6,6 +6,7 @@ import { Playfair_Display } from "next/font/google";
 import { motion } from "framer-motion";
 import { servicesData } from "@/content/services";
 import { EnquirySection } from "@/components/EnquirySection";
+import { Footer } from "@/components/Footer";
 import { FAQSection } from "@/components/FAQSection";
 import { TopNav } from "@/components/TopNav";
 import { VisionPurposeFlow } from "@/components/VisionPurposeFlow";
@@ -211,8 +212,7 @@ export default function HomePage() {
     const el = sectionRefs[id]?.current;
     if (!el) return;
 
-    const navH = navRef.current?.getBoundingClientRect().height ?? 0;
-    const y = el.getBoundingClientRect().top + window.scrollY - navH;
+    const y = el.getBoundingClientRect().top + window.scrollY;
 
     const root = document.documentElement;
     const prevSnap = root.style.scrollSnapType;
@@ -501,7 +501,7 @@ export default function HomePage() {
         </div>
         <div className="absolute inset-0 bg-gradient-to-b from-[rgba(11,27,59,0.68)] via-[rgba(11,27,59,0.6)] to-[rgba(11,27,59,0.72)]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_25%,rgba(176,141,87,0.14),transparent_38%)]" />
-        <div className="relative z-10 mx-auto flex h-full w-full max-w-[1180px] flex-col px-6 section-shell !pt-4">
+        <div className="relative z-10 mx-auto flex h-full w-full max-w-[1180px] flex-col px-6 section-shell">
           <div className="flex-shrink-0 space-y-[clamp(1rem,2.2vh,1.75rem)] text-paper">
             <div className="max-w-3xl space-y-[clamp(0.5rem,1.4vh,1rem)]">
               <motion.h2
@@ -571,8 +571,6 @@ export default function HomePage() {
     </>
   );
 
-  const currentYear = new Date().getFullYear();
-
   return (
     <>
       <TopNav
@@ -597,13 +595,7 @@ export default function HomePage() {
           isOnHome={isOnHome}
         />
       </main>
-      <footer className="border-t border-[color:var(--rule)] bg-paper/85 py-8 backdrop-blur">
-        <div className="mx-auto flex w-full max-w-[1180px] flex-col gap-2 px-6 text-sm text-ink/70 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-xs uppercase tracking-[0.32em] text-ink/60">Nathan &amp; Co.</p>
-          <p className="text-sm text-ink/70">© {currentYear} Nathan &amp; Co. All rights reserved.</p>
-          <p className="text-xs uppercase tracking-[0.28em] text-ink/50">Since 1962</p>
-        </div>
-      </footer>
+      <Footer />
       <ServiceModal
         isOpen={isServiceModalOpen}
         activeServiceId={activeServiceId}

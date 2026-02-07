@@ -64,7 +64,7 @@ export const EnquirySection = forwardRef<HTMLElement, EnquirySectionProps>(
         </div>
         <div className="absolute inset-0 bg-[rgba(6,10,20,0.72)]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,rgba(176,141,87,0.2),transparent_45%)]" />
-        <div className="relative z-10 mx-auto flex w-full max-w-[1180px] items-start px-6 section-shell !h-auto min-h-[calc(100vh-var(--nav-h))] !pt-4 !pb-4">
+        <div className="relative z-10 mx-auto flex w-full max-w-[1180px] min-h-[calc(100vh-var(--nav-h))] items-center px-6 section-shell">
           <div className="w-full rounded-2xl border border-[color:var(--rule)] bg-paper/85 p-[clamp(0.9rem,2.2vw,1.75rem)] shadow-[0_24px_60px_rgba(11,27,59,0.25)] backdrop-blur">
             <div className="grid gap-[clamp(0.85rem,2vw,1.5rem)] md:grid-cols-2">
               <motion.div

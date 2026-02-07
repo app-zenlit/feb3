@@ -6,7 +6,8 @@ import { motion } from "framer-motion";
 import { sectorsData } from "@/content/sectors";
 import {
   fadeUp,
-  fadeUpFast,
+  fadeLeft,
+  fadeRight,
   durations,
   stagger,
   PREMIUM_EASE,
@@ -44,15 +45,17 @@ export const SectorsSection = forwardRef<HTMLElement, SectorsSectionProps>(
               {...sectionReveal}
               className="text-center text-[clamp(2rem,3.5vw,3rem)] font-semibold tracking-[0.08em] text-ink"
             >
-              We serve
+              We Serve
             </motion.h2>
 
             <div className="mt-[clamp(2rem,5vh,4rem)] flex flex-1 items-start">
               <div className="grid w-full grid-cols-2 gap-x-[clamp(1rem,2.5vw,2rem)] gap-y-[clamp(2rem,4.5vh,3.5rem)] sm:grid-cols-3 lg:grid-cols-6">
-                {sectorsData.map((sector, index) => (
+                {sectorsData.map((sector, index) => {
+                  const isRightHalf = index % 6 >= 3;
+                  return (
                   <motion.div
                     key={sector.id}
-                    variants={fadeUpFast}
+                    variants={isRightHalf ? fadeRight : fadeLeft}
                     {...gridReveal}
                     transition={{
                       duration: durations.entry,
@@ -74,7 +77,8 @@ export const SectorsSection = forwardRef<HTMLElement, SectorsSectionProps>(
                       {sector.name}
                     </p>
                   </motion.div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </div>

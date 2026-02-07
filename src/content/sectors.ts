@@ -1,7 +1,6 @@
 export interface Sector {
-  id: string;
+  id: number;
   name: string;
-  description: string;
 }
 
 export { default as sectorsData } from "../../data/sectors.json";

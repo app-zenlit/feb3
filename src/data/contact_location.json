@@ -3,5 +3,6 @@
   "addressLine": "AG Road, Vellayil, Kozhikode, Kerala, India - 400001",
   "lat": 11.2588,
   "lng": 75.7804,
-  "zoom": 16
+  "zoom": 16,
+  "embedUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3912.9543!2d75.7804!3d11.2588!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTHCsDE1JzMxLjciTiA3NcKwNDYnNDkuNCJF!5e0!3m2!1sen!2sin!4v1234567890"
 }

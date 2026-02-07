@@ -27,9 +27,14 @@ export const SectorsSection = forwardRef<HTMLElement, SectorsSectionProps>(
         ref={ref}
         id={id}
         aria-label={sectionLabel}
-        className="relative isolate min-h-screen w-screen bg-paper lg:h-screen lg:overflow-hidden"
+        className="relative isolate min-h-screen w-screen lg:h-screen lg:overflow-hidden"
       >
         {sectionLabel ? <span className="sr-only">{sectionLabel}</span> : null}
+
+        <div className="absolute inset-0">
+          <Image src="/images/sectors/0.png" alt="" fill className="object-cover object-center" sizes="100vw" />
+        </div>
+        <div className="absolute inset-0 bg-white/80" />
 
         <div className="relative z-10 mx-auto flex w-full max-w-[1180px] flex-col px-6 section-shell lg:h-full">
           <div className="flex flex-col lg:h-full">
@@ -57,7 +62,7 @@ export const SectorsSection = forwardRef<HTMLElement, SectorsSectionProps>(
                   >
                     <div className="flex h-[clamp(48px,8vh,80px)] w-[clamp(48px,8vh,80px)] items-center justify-center overflow-hidden rounded-lg transition-transform duration-300 ease-out group-hover:scale-105">
                       <Image
-                        src={`/images/sectors/${sector.id}.jpg`}
+                        src={`/images/sectors/${sector.id}.png`}
                         alt={`${sector.name} logo`}
                         width={80}
                         height={80}

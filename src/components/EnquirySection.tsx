@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { fadeUp, fadeUpFast, staggerContainer, stagger, useInViewReplay } from "@/lib/motion";
 
 import contact from "../../data/contact.json";
+import { MapEmbedBox } from "./MapEmbedBox";
 
 type EnquirySectionProps = {
   id?: string;
@@ -120,6 +121,12 @@ export const EnquirySection = forwardRef<HTMLElement, EnquirySectionProps>(
                       {contact.phone}
                     </a>
                   </div>
+                </div>
+                <div className="pt-[clamp(0.5rem,1.5vh,1rem)]">
+                  <p className="mb-3 text-xs font-semibold uppercase tracking-[0.32em] text-ink">
+                    Find Us
+                  </p>
+                  <MapEmbedBox />
                 </div>
               </motion.div>
 

@@ -62,11 +62,14 @@ export function ServiceModal({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 12 }}
             transition={{ duration: 0.55, ease: PREMIUM_EASE }}
-            className="relative mx-4 flex h-[82vh] w-full max-w-[1100px] flex-col overflow-hidden rounded-[20px] border border-[rgba(176,141,87,0.2)] bg-paper/95 shadow-[0_24px_60px_rgba(11,27,59,0.3)]"
+            className="relative mx-4 flex h-[90vh] w-full max-w-[1100px] flex-col overflow-hidden rounded-[20px] border border-[rgba(176,141,87,0.2)] bg-paper/95 shadow-[0_24px_60px_rgba(11,27,59,0.3)] lg:h-[82vh]"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="sticky top-0 z-10 flex items-center justify-between border-b border-rule/30 bg-paper/95 px-8 py-5 backdrop-blur-sm">
-              <h2 className="text-2xl font-semibold text-ink">What We Do</h2>
+            <div className="sticky top-0 z-10 flex items-center justify-between border-b border-rule/30 bg-paper/95 px-5 py-4 backdrop-blur-sm lg:px-8 lg:py-5">
+              <h2 className="text-lg font-semibold text-ink lg:text-2xl">
+                <span className="lg:hidden">{activeService?.title ?? "What We Do"}</span>
+                <span className="hidden lg:inline">What We Do</span>
+              </h2>
               <button
                 onClick={onClose}
                 className="text-sm font-medium uppercase tracking-[0.18em] text-muted transition-colors duration-200 hover:text-ink hover:underline"
@@ -76,7 +79,7 @@ export function ServiceModal({
             </div>
 
             <div className="flex flex-1 overflow-hidden">
-              <div className="w-[32%] border-r border-rule/30 bg-paper/50 p-6 overflow-y-auto">
+              <div className="hidden w-[32%] border-r border-rule/30 bg-paper/50 p-6 overflow-y-auto lg:block">
                 <nav className="space-y-2">
                   {servicesData.map((service) => (
                     <button
@@ -102,7 +105,7 @@ export function ServiceModal({
                 </nav>
               </div>
 
-              <div className="flex-1 overflow-y-auto p-8">
+              <div className="flex-1 overflow-y-auto p-5 lg:p-8">
                 <AnimatePresence mode="wait">
                   {activeService && (
                     <motion.div
@@ -113,11 +116,11 @@ export function ServiceModal({
                       transition={{ duration: 0.3, ease: PREMIUM_EASE }}
                       className="space-y-6"
                     >
-                      <h3 className="text-3xl font-semibold text-ink">
+                      <h3 className="hidden text-3xl font-semibold text-ink lg:block">
                         {activeService.title}
                       </h3>
 
-                      <p className="text-lg leading-relaxed text-muted">
+                      <p className="text-base leading-relaxed text-muted lg:text-lg">
                         {activeService.intro}
                       </p>
 

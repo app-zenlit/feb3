@@ -442,7 +442,7 @@ export default function HomePage() {
         id="about"
         ref={aboutRef}
         aria-label={`${sectionMeta.about.numeral} ${sectionMeta.about.name}`}
-        className="relative isolate h-screen w-screen overflow-hidden bg-paper"
+        className="relative isolate min-h-screen w-screen bg-paper lg:h-screen lg:overflow-hidden"
       >
         <span className="sr-only">
           {sectionMeta.about.numeral} {sectionMeta.about.name}
@@ -451,7 +451,7 @@ export default function HomePage() {
           <Image src="/images/about/1.jpg" alt="" fill className="object-cover object-center" sizes="100vw" />
         </div>
         <div className="absolute inset-0 bg-white/80" />
-        <div className="relative z-10 mx-auto flex h-full w-full max-w-[1180px] items-start px-6 section-shell">
+        <div className="relative z-10 mx-auto flex w-full max-w-[1180px] items-start px-6 pb-24 section-shell lg:h-full lg:pb-0">
           <div className="grid w-full gap-[clamp(1.5rem,3vw,3rem)] lg:grid-cols-[1.2fr_0.8fr] lg:items-start">
             <div className="space-y-[clamp(1rem,2.2vh,1.75rem)]">
               <motion.h2
@@ -491,7 +491,7 @@ export default function HomePage() {
         id="services"
         ref={servicesRef}
         aria-label={`${sectionMeta.services.numeral} ${sectionMeta.services.name}`}
-        className="relative isolate h-screen w-screen overflow-hidden"
+        className="relative isolate min-h-screen w-screen lg:h-screen lg:overflow-hidden"
       >
         <span className="sr-only">
           {sectionMeta.services.numeral} {sectionMeta.services.name}
@@ -501,7 +501,7 @@ export default function HomePage() {
         </div>
         <div className="absolute inset-0 bg-gradient-to-b from-[rgba(11,27,59,0.68)] via-[rgba(11,27,59,0.6)] to-[rgba(11,27,59,0.72)]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_25%,rgba(176,141,87,0.14),transparent_38%)]" />
-        <div className="relative z-10 mx-auto flex h-full w-full max-w-[1180px] flex-col px-6 section-shell">
+        <div className="relative z-10 mx-auto flex w-full max-w-[1180px] flex-col px-6 pb-24 section-shell lg:h-full lg:pb-0">
           <div className="flex-shrink-0 space-y-[clamp(0.5rem,1.5vh,1rem)] text-paper">
             <div className="max-w-3xl space-y-[clamp(0.5rem,1.4vh,1rem)]">
               <motion.h2

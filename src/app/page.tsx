@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Playfair_Display } from "next/font/google";
 import { motion } from "framer-motion";
 import { servicesData } from "@/content/services";
@@ -158,6 +158,7 @@ export default function HomePage() {
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
   const [isServiceModalOpen, setIsServiceModalOpen] = useState(false);
   const [activeServiceId, setActiveServiceId] = useState<string | null>(null);
+  const [navH, setNavH] = useState(0);
   const sectionReveal = useInViewReplay({ amount: 0.6 });
   const sectionRevealPartial = useInViewReplay({ amount: 0.35 });
   const slideCount = landingSlides.length;
@@ -211,8 +212,7 @@ export default function HomePage() {
     const el = sectionRefs[id]?.current;
     if (!el) return;
 
-    const navH = navRef.current?.getBoundingClientRect().height ?? 0;
-    const y = el.getBoundingClientRect().top + window.scrollY - navH;
+    const y = el.getBoundingClientRect().top + window.scrollY;
 
     const root = document.documentElement;
     const prevSnap = root.style.scrollSnapType;
@@ -284,6 +284,15 @@ export default function HomePage() {
       window.removeEventListener("hashchange", onHashChange);
     };
   }, [scrollToSection, sectionRefs]);
+
+  useLayoutEffect(() => {
+    const update = () => {
+      setNavH(navRef.current?.getBoundingClientRect().height ?? 0);
+    };
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
 
   useEffect(() => {
     const observedSections = sections.map((section) => ({
@@ -360,13 +369,15 @@ export default function HomePage() {
 
   const isOnHome = activeSection === "home";
 
+  const contentPaddingTop = navH + 24;
+
   const aboutPanel = (
     <>
       <section
         id="home"
         ref={homeRef}
         aria-label={`${sectionMeta.home.numeral} ${sectionMeta.home.name}`}
-        className="relative isolate h-screen w-screen overflow-hidden"
+        className="relative isolate min-h-screen h-screen w-screen overflow-hidden"
       >
         <span className="sr-only">
           {sectionMeta.home.numeral} {sectionMeta.home.name}
@@ -400,7 +411,10 @@ export default function HomePage() {
         </motion.div>
         <div className="absolute inset-0 bg-gradient-to-b from-[rgba(11,27,59,0.7)] via-[rgba(11,27,59,0.58)] to-[rgba(11,27,59,0.46)]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_25%,rgba(176,141,87,0.16),transparent_40%)]" />
-        <div className="relative z-10 mx-auto flex h-full w-full max-w-[1180px] flex-col justify-center px-6 py-[clamp(2rem,6vh,5rem)]">
+        <div
+          className="relative z-10 mx-auto flex h-full w-full max-w-[1180px] flex-col justify-center px-6 py-[clamp(2rem,6vh,5rem)]"
+          style={{ paddingTop: contentPaddingTop }}
+        >
           <div className="max-w-2xl space-y-[clamp(1rem,2.5vh,1.75rem)] text-paper">
             <motion.div
               variants={fadeUpFast}
@@ -442,7 +456,7 @@ export default function HomePage() {
         id="about"
         ref={aboutRef}
         aria-label={`${sectionMeta.about.numeral} ${sectionMeta.about.name}`}
-        className="relative isolate h-screen w-screen overflow-hidden bg-paper"
+        className="relative isolate min-h-screen h-screen w-screen overflow-hidden bg-paper"
       >
         <span className="sr-only">
           {sectionMeta.about.numeral} {sectionMeta.about.name}
@@ -451,7 +465,10 @@ export default function HomePage() {
           <Image src="/images/about/1.jpg" alt="" fill className="object-cover object-center" sizes="100vw" />
         </div>
         <div className="absolute inset-0 bg-white/80" />
-        <div className="relative z-10 mx-auto flex h-full w-full max-w-[1180px] items-center px-6 section-shell">
+        <div
+          className="relative z-10 mx-auto flex h-full w-full max-w-[1180px] items-center px-6 section-shell"
+          style={{ paddingTop: contentPaddingTop }}
+        >
           <div className="grid w-full gap-[clamp(1.5rem,3vw,3rem)] lg:grid-cols-[1.2fr_0.8fr] lg:items-start">
             <div className="space-y-[clamp(1rem,2.2vh,1.75rem)]">
               <motion.h2
@@ -491,7 +508,7 @@ export default function HomePage() {
         id="services"
         ref={servicesRef}
         aria-label={`${sectionMeta.services.numeral} ${sectionMeta.services.name}`}
-        className="relative isolate h-screen w-screen overflow-hidden"
+        className="relative isolate min-h-screen h-screen w-screen overflow-hidden"
       >
         <span className="sr-only">
           {sectionMeta.services.numeral} {sectionMeta.services.name}
@@ -501,7 +518,10 @@ export default function HomePage() {
         </div>
         <div className="absolute inset-0 bg-gradient-to-b from-[rgba(11,27,59,0.68)] via-[rgba(11,27,59,0.6)] to-[rgba(11,27,59,0.72)]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_25%,rgba(176,141,87,0.14),transparent_38%)]" />
-        <div className="relative z-10 mx-auto flex h-full w-full max-w-[1180px] flex-col px-6 section-shell">
+        <div
+          className="relative z-10 mx-auto flex h-full w-full max-w-[1180px] flex-col px-6 section-shell"
+          style={{ paddingTop: contentPaddingTop }}
+        >
           <div className="flex-shrink-0 space-y-[clamp(1rem,2.2vh,1.75rem)] text-paper">
             <div className="max-w-3xl space-y-[clamp(0.5rem,1.4vh,1rem)]">
               <motion.h2
@@ -562,11 +582,13 @@ export default function HomePage() {
         id="enquiry"
         ref={enquiryRef}
         sectionLabel={`${sectionMeta.enquiry.numeral} ${sectionMeta.enquiry.name}`}
+        contentPaddingTop={contentPaddingTop}
       />
       <FAQSection
         id="faq"
         ref={faqRef}
         sectionLabel={`${sectionMeta.faq.numeral} ${sectionMeta.faq.name}`}
+        contentPaddingTop={contentPaddingTop}
       />
     </>
   );

@@ -11,6 +11,7 @@ import { FAQSection } from "@/components/FAQSection";
 import { TopNav } from "@/components/TopNav";
 import { VisionPurposeFlow } from "@/components/VisionPurposeFlow";
 import { ServiceModal } from "@/components/ServiceModal";
+import { SectorsSection } from "@/components/SectorsSection";
 import { fadeUp, fadeUpFast, fadeLeft, fadeRight, staggerContainer, scaleXReveal, stagger, durations, PREMIUM_EASE, useInViewReplay } from "@/lib/motion";
 
 
@@ -169,6 +170,7 @@ export default function HomePage() {
   const homeRef = useRef<HTMLElement | null>(null);
   const aboutRef = useRef<HTMLElement | null>(null);
   const servicesRef = useRef<HTMLElement | null>(null);
+  const sectorsRef = useRef<HTMLElement | null>(null);
   const enquiryRef = useRef<HTMLElement | null>(null);
   const faqRef = useRef<HTMLElement | null>(null);
   const sectionRefs = useMemo(
@@ -177,6 +179,7 @@ export default function HomePage() {
         home: homeRef,
         about: aboutRef,
         services: servicesRef,
+        sectors: sectorsRef,
         enquiry: enquiryRef,
         faq: faqRef
       } as const),
@@ -190,8 +193,9 @@ export default function HomePage() {
     { id: "home", name: "Home", numeral: "I" },
     { id: "about", name: "Who We Are", numeral: "II" },
     { id: "services", name: "What We Do", numeral: "III" },
-    { id: "enquiry", name: "Start an Enquiry", numeral: "IV" },
-    { id: "faq", name: "FAQ", numeral: "V" }
+    { id: "sectors", name: "Sectors", numeral: "IV" },
+    { id: "enquiry", name: "Start an Enquiry", numeral: "V" },
+    { id: "faq", name: "FAQ", numeral: "VI" }
   ] satisfies ReadonlyArray<Section>;
 
   const sections = useMemo<Section[]>(() => SECTION_ITEMS, []);
@@ -583,6 +587,11 @@ export default function HomePage() {
       <main className="relative">
         {aboutPanel}
         {workPanel}
+        <SectorsSection
+          id="sectors"
+          ref={sectorsRef}
+          sectionLabel={`${sectionMeta.sectors.numeral} ${sectionMeta.sectors.name}`}
+        />
         {contactPanel}
         <PanelProgress
           sections={sections}

@@ -1,0 +1,47 @@
+[
+  {
+    "id": "manufacturing",
+    "name": "Manufacturing & Industrial",
+    "description": "End-to-end financial advisory for manufacturing enterprises — from cost optimization and compliance to strategic planning for scale."
+  },
+  {
+    "id": "real-estate",
+    "name": "Real Estate & Infrastructure",
+    "description": "Specialized financial structuring, regulatory compliance, and tax advisory for real estate developers, builders, and infrastructure projects."
+  },
+  {
+    "id": "banking-finance",
+    "name": "Banking & Financial Services",
+    "description": "Deep domain expertise in statutory audit, regulatory reporting, and risk advisory for banks, NBFCs, and financial institutions."
+  },
+  {
+    "id": "technology",
+    "name": "Information Technology",
+    "description": "Agile financial management, international taxation, and compliance services tailored for IT companies and tech startups."
+  },
+  {
+    "id": "healthcare",
+    "name": "Healthcare & Pharmaceuticals",
+    "description": "Comprehensive audit, taxation, and regulatory support for hospitals, pharmaceutical companies, and healthcare providers."
+  },
+  {
+    "id": "retail-fmcg",
+    "name": "Retail & Consumer Goods",
+    "description": "GST advisory, working capital management, and financial reporting for retail chains, FMCG brands, and e-commerce businesses."
+  },
+  {
+    "id": "education",
+    "name": "Education & Non-Profit",
+    "description": "Statutory compliance, fund management, and governance advisory for educational institutions, trusts, and non-profit organizations."
+  },
+  {
+    "id": "energy",
+    "name": "Energy & Utilities",
+    "description": "Financial planning, project finance advisory, and regulatory compliance for energy companies and utility providers."
+  },
+  {
+    "id": "hospitality",
+    "name": "Hospitality & Tourism",
+    "description": "Tailored accounting, tax planning, and business advisory for hotels, restaurants, and tourism enterprises."
+  }
+]

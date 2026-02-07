@@ -155,7 +155,7 @@ const services = [
 ];
 
 export default function HomePage() {
-  const [activeSection, setActiveSection] = useState<string>("home");
+  const [activeSection, setActiveSection] = useState<SectionId>("home");
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
   const [isServiceModalOpen, setIsServiceModalOpen] = useState(false);
   const [activeServiceId, setActiveServiceId] = useState<string | null>(null);
@@ -170,27 +170,31 @@ export default function HomePage() {
   const servicesRef = useRef<HTMLElement | null>(null);
   const enquiryRef = useRef<HTMLElement | null>(null);
   const faqRef = useRef<HTMLElement | null>(null);
-  const sections = useMemo(() => SECTION_ITEMS, []);
-
   const sectionRefs = useMemo(
-    () => ({
-      home: homeRef,
-      about: aboutRef,
-      services: servicesRef,
-      enquiry: enquiryRef,
-      faq: faqRef
-    }),
+    () =>
+      ({
+        home: homeRef,
+        about: aboutRef,
+        services: servicesRef,
+        enquiry: enquiryRef,
+        faq: faqRef
+      } as const),
     []
   );
 
+  type SectionId = keyof typeof sectionRefs;
+  type Section = { id: SectionId; name: string; numeral: string };
+
+  const sections = useMemo<Section[]>(() => SECTION_ITEMS, []);
+
   const sectionMeta = useMemo(
     () =>
-      sections.reduce<Record<string, { id: string; name: string; numeral: string }>>(
+      sections.reduce<Record<SectionId, Section>>(
         (acc, section) => {
           acc[section.id] = section;
           return acc;
         },
-        {}
+        {} as Record<SectionId, Section>
       ),
     [sections]
   );

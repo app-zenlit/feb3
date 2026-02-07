@@ -5,7 +5,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Playfair_Display } from "next/font/google";
 import { motion } from "framer-motion";
 import { servicesData } from "@/content/services";
-import { SECTION_ITEMS } from "@/content/sections";
 import { EnquirySection } from "@/components/EnquirySection";
 import { FAQSection } from "@/components/FAQSection";
 import { TopNav } from "@/components/TopNav";
@@ -184,6 +183,14 @@ export default function HomePage() {
 
   type SectionId = keyof typeof sectionRefs;
   type Section = { id: SectionId; name: string; numeral: string };
+
+  const SECTION_ITEMS = [
+    { id: "home", name: "Home", numeral: "I" },
+    { id: "about", name: "Who We Are", numeral: "II" },
+    { id: "services", name: "What We Do", numeral: "III" },
+    { id: "enquiry", name: "Start an Enquiry", numeral: "IV" },
+    { id: "faq", name: "Frequently Asked Questions", numeral: "V" }
+  ] satisfies ReadonlyArray<Section>;
 
   const sections = useMemo<Section[]>(() => SECTION_ITEMS, []);
 

@@ -229,10 +229,12 @@ export default function HomePage() {
   }, [sectionRefs]);
 
   const handleNavigate = useCallback(
-    (sectionId: SectionId) => {
-      scrollToSection(sectionId);
+    (sectionId: string) => {
+      if (sectionId in sectionRefs) {
+        scrollToSection(sectionId as SectionId);
+      }
     },
-    [scrollToSection]
+    [scrollToSection, sectionRefs]
   );
 
   const handleSectionNav = useCallback((index: number) => {

@@ -22,16 +22,27 @@ const formatAddress = (location: Location) => {
 
 export function MapPanel({ location }: MapPanelProps) {
   const [copied, setCopied] = useState(false);
-  const mapSrc = useMemo(() => {
-    const delta = 0.01;
-    const left = (location.lng - delta).toFixed(5);
-    const right = (location.lng + delta).toFixed(5);
-    const top = (location.lat + delta).toFixed(5);
-    const bottom = (location.lat - delta).toFixed(5);
-    return `https://www.openstreetmap.org/export/embed.html?bbox=${left}%2C${bottom}%2C${right}%2C${top}&layer=mapnik&marker=${location.lat}%2C${location.lng}`;
-  }, [location.lat, location.lng]);
-
-  const openMapsUrl = `https://www.google.com/maps/search/?api=1&query=${location.lat},${location.lng}`;
+  const { mapSrc, mapLink } = useMemo(() => {
+    const locationWithQuery = location as Location & { placeQuery?: string };
+    if (typeof location.lat === "number" && typeof location.lng === "number") {
+      const coords = `${location.lat},${location.lng}`;
+      return {
+        mapSrc: `https://www.google.com/maps?q=${coords}&z=15&output=embed`,
+        mapLink: `https://www.google.com/maps?q=${coords}`
+      };
+    }
+    if (locationWithQuery.placeQuery) {
+      const encoded = encodeURIComponent(locationWithQuery.placeQuery);
+      return {
+        mapSrc: `https://www.google.com/maps?q=${encoded}&z=15&output=embed`,
+        mapLink: `https://www.google.com/maps?q=${encoded}`
+      };
+    }
+    return {
+      mapSrc: "https://www.google.com/maps?q=0,0&z=2&output=embed",
+      mapLink: "https://www.google.com/maps?q=0,0"
+    };
+  }, [location]);
 
   const handleCopy = async () => {
     const text = formatAddress(location);
@@ -56,13 +67,13 @@ export function MapPanel({ location }: MapPanelProps) {
       </div>
       <div className="flex flex-wrap items-center gap-2">
         <a
-          href={openMapsUrl}
+          href={mapLink}
           target="_blank"
           rel="noreferrer"
           className="rounded-full border border-ink bg-ink px-4 py-2 text-[0.65rem] font-semibold uppercase tracking-[0.32em] text-paper transition hover:shadow-[0_12px_30px_rgba(11,27,59,0.25)]"
-          aria-label="Open location in Google Maps"
+          aria-label="View larger map in Google Maps"
         >
-          Open in Google Maps
+          View larger map
         </a>
         <button
           type="button"

@@ -41,17 +41,29 @@ export function MapPanel({ location }: MapPanelProps) {
     };
   }, [location]);
 
+  const isAllLocations = !location;
+
   return (
     <div className="flex h-full flex-col gap-3">
       <div className="overflow-hidden rounded-xl border border-[color:var(--rule)] bg-white/80 shadow-sm">
-        <iframe
-          title={mapTitle}
-          src={mapSrc}
-          className="h-[240px] w-full sm:h-[260px] lg:h-[430px]"
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-          allowFullScreen
-        />
+        <div
+          className={`relative overflow-hidden ${
+            isAllLocations ? "h-[240px] sm:h-[260px] lg:h-[430px]" : ""
+          }`}
+        >
+          <iframe
+            title={mapTitle}
+            src={mapSrc}
+            className={
+              isAllLocations
+                ? "h-[calc(100%+70px)] w-full -translate-y-[70px]"
+                : "h-[240px] w-full sm:h-[260px] lg:h-[430px]"
+            }
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            allowFullScreen
+          />
+        </div>
       </div>
       <div className="flex flex-wrap items-center gap-2">
         {directionsUrl ? (

@@ -85,6 +85,8 @@ export function EnquiryForm({ selectedLocation }: EnquiryFormProps) {
       <div className="mt-auto pt-[clamp(0.75rem,1.5vh,1rem)]">
         <button
           type="submit"
+          formAction="https://formsubmit.co/karthikmohan133@gmail.com"
+          formMethod="POST"
           className="group inline-flex items-center justify-center gap-2 rounded-full border border-ink bg-ink px-6 py-[clamp(0.5rem,1.2vh,0.75rem)] text-[clamp(0.6rem,0.9vw,0.75rem)] font-semibold uppercase tracking-[0.3em] text-paper shadow-[0_18px_40px_rgba(11,27,59,0.2)] transition-shadow hover:shadow-[0_22px_45px_rgba(11,27,59,0.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--gold)] focus-visible:ring-offset-2 focus-visible:ring-offset-paper disabled:cursor-not-allowed disabled:opacity-70"
         >
           Send

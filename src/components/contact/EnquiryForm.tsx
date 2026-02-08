@@ -4,7 +4,10 @@ import type { ChangeEvent, FormEvent } from "react";
 import { useState } from "react";
 import type { Location } from "config/locations";
 
-const formatLocation = (location: Location) => {
+const formatLocation = (location?: Location | null) => {
+  if (!location) {
+    return "Not selected";
+  }
   const parts = [location.name, location.city, location.state].filter(Boolean);
   return parts.join(", ");
 };
@@ -24,7 +27,7 @@ const initialFormState: FormState = {
 };
 
 type EnquiryFormProps = {
-  selectedLocation: Location;
+  selectedLocation?: Location | null;
 };
 
 export function EnquiryForm({ selectedLocation }: EnquiryFormProps) {
@@ -45,9 +48,6 @@ export function EnquiryForm({ selectedLocation }: EnquiryFormProps) {
   return (
     <form onSubmit={handleSubmit} className="flex h-full flex-col">
       <div className="space-y-[clamp(0.5rem,1.2vh,0.75rem)]">
-        <div className="rounded-xl border border-[color:var(--rule)] bg-white/80 px-4 py-3 text-xs uppercase tracking-[0.28em] text-ink">
-          Selected location: <span className="font-semibold">{selectedLocation.name}</span>
-        </div>
         <div className="space-y-1">
           <label className="text-xs font-semibold uppercase tracking-[0.28em] text-ink" htmlFor="enquiry-name">
             Name

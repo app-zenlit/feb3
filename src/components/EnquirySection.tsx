@@ -25,11 +25,20 @@ export const EnquirySection = forwardRef<HTMLElement, EnquirySectionProps>(
       return LOCATIONS.find((location) => location.isPrimary)?.id ?? LOCATIONS[0]?.id;
     }, []);
 
-    const [selectedLocationId, setSelectedLocationId] = useState(defaultLocationId ?? "");
+    const [selectedLocationId, setSelectedLocationId] = useState<string | null>(
+      defaultLocationId ?? null
+    );
 
     const selectedLocation = useMemo(() => {
-      return LOCATIONS.find((location) => location.id === selectedLocationId) ?? LOCATIONS[0];
+      if (!selectedLocationId) {
+        return null;
+      }
+      return LOCATIONS.find((location) => location.id === selectedLocationId) ?? null;
     }, [selectedLocationId]);
+
+    const handleSelectLocation = (id: string) => {
+      setSelectedLocationId((current) => (current === id ? null : id));
+    };
 
     return (
       <section
@@ -79,17 +88,15 @@ export const EnquirySection = forwardRef<HTMLElement, EnquirySectionProps>(
               <div className="lg:col-span-3">
                 <LocationsList
                   locations={LOCATIONS}
-                  selectedId={selectedLocationId}
-                  onSelect={setSelectedLocationId}
+                  selectedId={selectedLocationId ?? ""}
+                  onSelect={handleSelectLocation}
                 />
               </div>
               <div className="lg:col-span-5">
-                {selectedLocation ? <MapPanel location={selectedLocation} /> : null}
+                <MapPanel location={selectedLocation} />
               </div>
               <div className="lg:col-span-4">
-                {selectedLocation ? (
-                  <EnquiryForm selectedLocation={selectedLocation} />
-                ) : null}
+                <EnquiryForm selectedLocation={selectedLocation} />
               </div>
             </motion.div>
           </div>

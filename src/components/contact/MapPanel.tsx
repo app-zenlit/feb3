@@ -49,6 +49,8 @@ export function MapPanel({ location }: MapPanelProps) {
           src={mapSrc}
           className="h-[240px] w-full sm:h-[260px] lg:h-[430px]"
           loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+          allowFullScreen
         />
       </div>
       <div className="flex flex-wrap items-center gap-2">

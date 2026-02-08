@@ -14,7 +14,7 @@ export type Location = {
 };
 
 export const ALL_LOCATIONS_MYMAPS_EMBED_URL =
-  "https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d4007030.655647701!2d77.45600009642519!3d11.252885525518911!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1770533659926!5m2!1sen!2sin";
+  "https://www.google.com/maps/d/u/0/embed?mid=1ywmwVXTu6hcZ65Xyxrciz_eBXjYRUuQ&ehbc=2E312F";
 
 export const LOCATIONS: Location[] = [
   {

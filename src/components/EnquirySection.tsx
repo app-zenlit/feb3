@@ -15,11 +15,14 @@ type EnquirySectionProps = {
   id?: string;
   className?: string;
   sectionLabel?: string;
+  showThankYou?: boolean;
+  onCloseThankYou?: () => void;
 };
 
 export const EnquirySection = forwardRef<HTMLElement, EnquirySectionProps>(
-  ({ id, className, sectionLabel }, ref) => {
+  ({ id, className, sectionLabel, showThankYou = false, onCloseThankYou }, ref) => {
     const sectionReveal = useInViewReplay({ amount: 0.6 });
+    const NAV_H = 72;
 
     const [selectedLocationId, setSelectedLocationId] = useState<string | null>(null);
 
@@ -39,7 +42,8 @@ export const EnquirySection = forwardRef<HTMLElement, EnquirySectionProps>(
         ref={ref}
         id={id}
         aria-label={sectionLabel}
-        className={className ?? "relative isolate min-h-screen w-screen"}
+        style={{ paddingTop: NAV_H }}
+        className={className ?? "relative isolate w-screen"}
       >
         {sectionLabel ? <span className="sr-only">{sectionLabel}</span> : null}
         <div className="absolute inset-0">
@@ -53,8 +57,13 @@ export const EnquirySection = forwardRef<HTMLElement, EnquirySectionProps>(
         </div>
         <div className="absolute inset-0 bg-[rgba(6,10,20,0.72)]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,rgba(176,141,87,0.2),transparent_45%)]" />
-        <div className="relative z-10 mx-auto flex w-full max-w-[1180px] min-h-[calc(100vh-var(--nav-h))] items-center px-6 section-shell">
-          <div className="w-full rounded-2xl border border-[color:var(--rule)] bg-paper/85 p-[clamp(0.9rem,2.2vw,1.75rem)] shadow-[0_24px_60px_rgba(11,27,59,0.25)] backdrop-blur">
+        <div
+          style={{ minHeight: `calc(100vh - ${NAV_H}px)` }}
+          className="relative z-10 mx-auto flex w-full max-w-[1180px] items-center justify-center px-4 md:px-6 section-shell"
+        >
+          <div
+            className="flex w-full max-w-[1180px] flex-col rounded-2xl border border-[color:var(--rule)] bg-paper/85 p-[clamp(0.9rem,2.2vw,1.75rem)] shadow-[0_24px_60px_rgba(11,27,59,0.25)] backdrop-blur overflow-hidden"
+          >
             <motion.div
               variants={fadeUp}
               {...sectionReveal}
@@ -77,20 +86,42 @@ export const EnquirySection = forwardRef<HTMLElement, EnquirySectionProps>(
             <motion.div
               variants={staggerContainer(stagger.normal)}
               {...sectionReveal}
-              className="grid gap-[clamp(0.85rem,2vw,1.5rem)] lg:grid-cols-12"
+              className="grid min-h-0 flex-1 gap-[clamp(0.85rem,2vw,1.5rem)] lg:grid-cols-12"
             >
-              <div className="lg:col-span-3">
+              <div className="min-h-0 lg:col-span-3">
                 <LocationsList
                   locations={LOCATIONS}
                   selectedId={selectedLocationId ?? ""}
                   onSelect={handleSelectLocation}
                 />
               </div>
-              <div className="lg:col-span-5">
+              <div className="min-h-0 lg:col-span-5">
                 <MapPanel location={selectedLocation} />
               </div>
-              <div className="lg:col-span-4">
+              <div className="relative min-h-0 lg:col-span-4">
                 <EnquiryForm selectedLocation={selectedLocation} />
+                {showThankYou ? (
+                  <div
+                    className="absolute inset-0 flex items-center justify-center rounded-2xl bg-[rgba(6,10,20,0.72)] p-6"
+                    role="dialog"
+                    aria-modal="true"
+                    aria-label="Enquiry submitted"
+                  >
+                    <div className="w-full max-w-sm space-y-4 rounded-2xl border border-[color:var(--rule)] bg-paper/95 p-6 text-center shadow-[0_24px_60px_rgba(11,27,59,0.25)]">
+                      <h3 className="text-lg font-semibold text-ink">Thank you!</h3>
+                      <p className="text-sm text-muted">
+                        Your enquiry has been sent. We will get back to you shortly.
+                      </p>
+                      <button
+                        type="button"
+                        onClick={onCloseThankYou}
+                        className="inline-flex items-center justify-center rounded-full border border-ink bg-ink px-5 py-2 text-[0.7rem] font-semibold uppercase tracking-[0.3em] text-paper transition hover:shadow-[0_12px_30px_rgba(11,27,59,0.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--gold)] focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </div>
+                ) : null}
               </div>
             </motion.div>
           </div>

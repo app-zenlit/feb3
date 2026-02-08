@@ -32,6 +32,7 @@ type EnquiryFormProps = {
 
 export function EnquiryForm({ selectedLocation }: EnquiryFormProps) {
   const [formData, setFormData] = useState<FormState>(initialFormState);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -41,12 +42,24 @@ export function EnquiryForm({ selectedLocation }: EnquiryFormProps) {
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    console.log({ ...formData, location: formatLocation(selectedLocation) });
+    if (isSubmitting) {
+      event.preventDefault();
+      return;
+    }
+    setIsSubmitting(true);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex h-full flex-col">
+    <form
+      method="POST"
+      action="https://formsubmit.co/karthikmohan133@gmail.com"
+      onSubmit={handleSubmit}
+      className="flex h-full flex-col"
+    >
+      <input type="hidden" name="_subject" value="New Website Enquiry" />
+      <input type="hidden" name="_template" value="table" />
+      <input type="hidden" name="_captcha" value="true" />
+      <input type="hidden" name="_next" value="/thank-you" />
       <div className="space-y-[clamp(0.5rem,1.2vh,0.75rem)]">
         <div className="space-y-1">
           <label className="text-xs font-semibold uppercase tracking-[0.28em] text-ink" htmlFor="enquiry-name">
@@ -111,14 +124,18 @@ export function EnquiryForm({ selectedLocation }: EnquiryFormProps) {
             className="w-full resize-none rounded-lg border border-[color:var(--rule)] bg-white/90 px-4 py-[clamp(0.5rem,1.2vh,0.75rem)] text-[clamp(0.8rem,1vw,0.95rem)] text-ink placeholder:text-muted shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[color:var(--gold)] focus:shadow-[0_0_0_3px_rgba(176,141,87,0.1)]"
           />
         </div>
+        <input type="hidden" name="location" value={formatLocation(selectedLocation)} />
       </div>
       <div className="mt-auto pt-[clamp(0.75rem,1.5vh,1rem)]">
         <button
           type="submit"
-          className="group inline-flex items-center justify-center gap-2 rounded-full border border-ink bg-ink px-6 py-[clamp(0.5rem,1.2vh,0.75rem)] text-[clamp(0.6rem,0.9vw,0.75rem)] font-semibold uppercase tracking-[0.3em] text-paper shadow-[0_18px_40px_rgba(11,27,59,0.2)] transition-shadow hover:shadow-[0_22px_45px_rgba(11,27,59,0.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--gold)] focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
+          disabled={isSubmitting}
+          className="group inline-flex items-center justify-center gap-2 rounded-full border border-ink bg-ink px-6 py-[clamp(0.5rem,1.2vh,0.75rem)] text-[clamp(0.6rem,0.9vw,0.75rem)] font-semibold uppercase tracking-[0.3em] text-paper shadow-[0_18px_40px_rgba(11,27,59,0.2)] transition-shadow hover:shadow-[0_22px_45px_rgba(11,27,59,0.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--gold)] focus-visible:ring-offset-2 focus-visible:ring-offset-paper disabled:cursor-not-allowed disabled:opacity-70"
         >
-          Send
-          <span className="inline-block transition-transform duration-200 group-hover:translate-x-1">→</span>
+          {isSubmitting ? "Sending…" : "Send"}
+          <span className="inline-block transition-transform duration-200 group-hover:translate-x-1">
+            →
+          </span>
         </button>
       </div>
     </form>

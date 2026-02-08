@@ -42,11 +42,9 @@ export function EnquiryForm({ selectedLocation }: EnquiryFormProps) {
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    if (isSubmitting) {
-      event.preventDefault();
-      return;
+    if (!isSubmitting) {
+      setIsSubmitting(true);
     }
-    setIsSubmitting(true);
   };
 
   return (

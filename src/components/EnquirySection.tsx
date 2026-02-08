@@ -21,13 +21,7 @@ export const EnquirySection = forwardRef<HTMLElement, EnquirySectionProps>(
   ({ id, className, sectionLabel }, ref) => {
     const sectionReveal = useInViewReplay({ amount: 0.6 });
 
-    const defaultLocationId = useMemo(() => {
-      return LOCATIONS.find((location) => location.isPrimary)?.id ?? LOCATIONS[0]?.id;
-    }, []);
-
-    const [selectedLocationId, setSelectedLocationId] = useState<string | null>(
-      defaultLocationId ?? null
-    );
+    const [selectedLocationId, setSelectedLocationId] = useState<string | null>(null);
 
     const selectedLocation = useMemo(() => {
       if (!selectedLocationId) {

@@ -18,13 +18,13 @@ export const ALL_LOCATIONS_MYMAPS_EMBED_URL =
 
 export const LOCATIONS: Location[] = [
   {
-    id: "nathan-koz",
-    name: "Nathan & Co.",
-    addressLines: ["AG Road, Vellayil"],
+    id: "calicut",
+    name: "Nathan & Co. — Calicut",
+    addressLines: ["Aravind Ghosh Road, Vellayil"],
     city: "Kozhikode",
     state: "Kerala",
     country: "India",
-    postalCode: "400001",
+    postalCode: "673032",
     email: "info@nathanandco.in",
     phone: "+91 8089388655",
     lat: 11.2588,
@@ -32,16 +32,42 @@ export const LOCATIONS: Location[] = [
     isPrimary: true
   },
   {
-    id: "bengaluru",
-    name: "Nathan & Co. — Bengaluru",
-    addressLines: ["MG Road", "Shanthala Nagar"],
-    city: "Bengaluru",
-    state: "Karnataka",
+    id: "tirur",
+    name: "Nathan & Co. — Tirur",
+    addressLines: ["442 H Fida Tower", "PAN Bazar"],
+    city: "Tirur",
+    state: "Kerala",
     country: "India",
-    postalCode: "560001",
+    postalCode: "676101",
     email: "info@nathanandco.in",
     phone: "+91 8089388655",
-    lat: 12.9741854,
-    lng: 77.6124135
+    lat: 10.9167,
+    lng: 75.9222
+  },
+  {
+    id: "haveri",
+    name: "Nathan & Co. — Haveri",
+    addressLines: ["No. 2919/B, M.G. Road", "Near Post Office"],
+    city: "Haveri",
+    state: "Karnataka",
+    country: "India",
+    postalCode: "581110",
+    email: "info@nathanandco.in",
+    phone: "+91 8089388655",
+    lat: 14.7934,
+    lng: 75.4043
+  },
+  {
+    id: "cochin",
+    name: "Nathan & Co. — Cochin",
+    addressLines: ["38/2364B, Karuvelil Rd", "Edappally"],
+    city: "Kochi",
+    state: "Kerala",
+    country: "India",
+    postalCode: "682024",
+    email: "info@nathanandco.in",
+    phone: "+91 8089388655",
+    lat: 10.0159,
+    lng: 76.3095
   }
 ];

@@ -8,11 +8,13 @@ import { motion } from "framer-motion";
 import { servicesData } from "@/content/services";
 import { EnquirySection } from "@/components/EnquirySection";
 import { Footer } from "@/components/Footer";
-import { FAQSection } from "@/components/FAQSection";
 import { TopNav } from "@/components/TopNav";
 import { VisionPurposeFlow } from "@/components/VisionPurposeFlow";
 import { ServiceModal } from "@/components/ServiceModal";
 import { SectorsSection } from "@/components/SectorsSection";
+import { InteractiveChatbotPanel } from "@/components/chatbot/InteractiveChatbotPanel";
+import { useInteractiveChatbot } from "@/components/chatbot/useInteractiveChatbot";
+import { useChatbotPromptTooltip } from "@/components/chatbot/useChatbotPromptTooltip";
 import { fadeUp, fadeUpFast, fadeLeft, fadeRight, staggerContainer, scaleXReveal, stagger, durations, PREMIUM_EASE, useInViewReplay } from "@/lib/motion";
 
 
@@ -34,6 +36,10 @@ const landingSlides = [
   {
     src: "/images/landing-page/3.jpg",
     caption: "Rooted in Tradition. Ready for Tomorrow"
+  },
+  {
+    src: "/images/landing-page/4.jpg",
+    caption: "Ledger to Crypto"
   }
 ];
 
@@ -162,6 +168,9 @@ export default function HomePageClient() {
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
   const [isServiceModalOpen, setIsServiceModalOpen] = useState(false);
   const [activeServiceId, setActiveServiceId] = useState<string | null>(null);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const { isPromptVisible, markPromptDismissed } = useChatbotPromptTooltip({ isChatOpen });
+  const chatbotState = useInteractiveChatbot();
   const sectionReveal = useInViewReplay({ amount: 0.6 });
   const sectionRevealPartial = useInViewReplay({ amount: 0.35 });
   const slideCount = landingSlides.length;
@@ -174,7 +183,6 @@ export default function HomePageClient() {
   const servicesRef = useRef<HTMLElement | null>(null);
   const sectorsRef = useRef<HTMLElement | null>(null);
   const enquiryRef = useRef<HTMLElement | null>(null);
-  const faqRef = useRef<HTMLElement | null>(null);
   const sectionRefs = useMemo(
     () =>
       ({
@@ -182,8 +190,7 @@ export default function HomePageClient() {
         about: aboutRef,
         services: servicesRef,
         sectors: sectorsRef,
-        enquiry: enquiryRef,
-        faq: faqRef
+        enquiry: enquiryRef
       } as const),
     []
   );
@@ -196,8 +203,7 @@ export default function HomePageClient() {
     { id: "about", name: "Who We Are", numeral: "II" },
     { id: "services", name: "What We Do", numeral: "III" },
     { id: "sectors", name: "Sectors", numeral: "IV" },
-    { id: "enquiry", name: "Start an Enquiry", numeral: "V" },
-    { id: "faq", name: "FAQ", numeral: "VI" }
+    { id: "enquiry", name: "Start an Enquiry", numeral: "V" }
   ] satisfies ReadonlyArray<Section>;
 
   const sections = useMemo<Section[]>(() => SECTION_ITEMS, []);
@@ -355,7 +361,7 @@ export default function HomePageClient() {
   }, []);
 
   const handleTouchEnd = useCallback(() => {
-    if (!touchStartXRef.current || !touchEndXRef.current) return;
+    if (touchStartXRef.current == null || touchEndXRef.current == null) return;
     const distance = touchStartXRef.current - touchEndXRef.current;
     const minSwipeDistance = 50;
 
@@ -391,6 +397,7 @@ export default function HomePageClient() {
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
+          onTouchCancel={handleTouchEnd}
         >
           {landingSlides.map((slide, index) => (
             <div
@@ -432,6 +439,14 @@ export default function HomePageClient() {
             >
               Nathan &amp; Co.
             </motion.h1>
+            <motion.p
+              variants={fadeUpFast}
+              transition={{ duration: durations.entryFast, ease: PREMIUM_EASE, delay: 0.18 }}
+              {...sectionReveal}
+              className="text-[0.8rem] uppercase tracking-[0.34em] text-paper/80"
+            >
+              Since 1962
+            </motion.p>
             <motion.div
               variants={scaleXReveal}
               transition={{ duration: durations.entry, ease: PREMIUM_EASE, delay: 0.3 }}
@@ -451,7 +466,7 @@ export default function HomePageClient() {
         </div>
         <div className="absolute bottom-[6.5rem] left-1/2 z-20 flex -translate-x-1/2 flex-col items-center gap-3">
           <p
-            className={`${playfairDisplay.className} text-center text-base text-paper drop-shadow-[0_3px_16px_rgba(0,0,0,0.65)] sm:text-xl max-w-[600px] px-4`}
+            className={`${playfairDisplay.className} w-[90vw] max-w-none whitespace-nowrap text-center text-[0.75rem] text-paper drop-shadow-[0_3px_16px_rgba(0,0,0,0.65)] sm:w-auto sm:max-w-[600px] sm:text-xl px-4`}
           >
             {landingSlides[activeSlideIndex]?.caption}
           </p>
@@ -605,13 +620,18 @@ export default function HomePageClient() {
           router.replace(target);
         }}
       />
-      <FAQSection
-        id="faq"
-        ref={faqRef}
-        sectionLabel={`${sectionMeta.faq.numeral} ${sectionMeta.faq.name}`}
-      />
     </>
   );
+
+  const handleChatToggle = () => {
+    markPromptDismissed();
+    setIsChatOpen((prev) => !prev);
+  };
+
+  const handlePromptClose = () => {
+    markPromptDismissed();
+    setIsChatOpen(true);
+  };
 
   return (
     <>
@@ -644,6 +664,46 @@ export default function HomePageClient() {
         onClose={handleServiceModalClose}
         onServiceChange={handleServiceChange}
       />
+      {!isOnHome ? (
+        <div className="fixed bottom-24 right-5 z-50 flex flex-col items-end gap-3 sm:bottom-5">
+          {isChatOpen ? <InteractiveChatbotPanel state={chatbotState} /> : null}
+          <div className="relative flex items-end justify-end">
+            <div
+              className={`absolute bottom-[calc(100%+0.7rem)] right-0 w-[min(72vw,13rem)] rounded-lg border border-[rgba(62,44,28,0.12)] bg-[#F8F5F0] pl-3 pr-8 py-2 text-left text-sm font-medium text-[#3E2C1C] shadow-[0_8px_22px_rgba(62,44,28,0.15)] transition-opacity duration-300 sm:w-52 ${
+                isPromptVisible ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
+              }`}
+              aria-hidden={!isPromptVisible}
+            >
+              May I help you?
+              <button
+                type="button"
+                onClick={handlePromptClose}
+                className="absolute right-2 top-1 text-sm leading-none text-[#3E2C1C]"
+                aria-label="Open chatbot"
+              >
+                ×
+              </button>
+              <span
+                className="absolute -bottom-[6px] right-5 h-3 w-3 rotate-45 border-b border-r border-[rgba(62,44,28,0.12)] bg-[#F8F5F0]"
+                aria-hidden
+              />
+            </div>
+            <div className="relative">
+              {isPromptVisible ? <span className="chatbot-prompt-ring" aria-hidden /> : null}
+              <button
+                type="button"
+                onClick={handleChatToggle}
+                className={`relative flex h-14 w-14 items-center justify-center rounded-full border border-[color:var(--rule)] bg-paper/80 text-2xl font-semibold text-ink shadow-[0_12px_30px_rgba(11,27,59,0.18)] backdrop-blur-md transition hover:scale-[1.03] ${
+                  isPromptVisible ? "chatbot-prompt-pulse" : ""
+                }`}
+                aria-label={isChatOpen ? "Close chat" : "Open chat"}
+              >
+                {isChatOpen ? "×" : "?"}
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </>
   );
 }
@@ -658,13 +718,13 @@ function PanelProgress({
   onNavigate: (index: number) => void;
 }) {
   return (
-    <div className="pointer-events-none fixed bottom-8 left-1/2 z-40 flex -translate-x-1/2 items-center justify-center">
-      <div className="flex items-center gap-3 rounded-full border border-[color:var(--rule)] bg-paper/80 px-5 py-3 shadow-[0_18px_40px_rgba(11,27,59,0.18)] backdrop-blur">
-        <span className="text-[0.65rem] uppercase tracking-[0.32em] text-muted">
+    <div className="pointer-events-none fixed bottom-4 left-1/2 z-40 flex -translate-x-1/2 items-center justify-center sm:bottom-8">
+      <div className="flex items-center gap-2 rounded-full border border-[color:var(--rule)] bg-paper/80 px-4 py-2 shadow-[0_18px_40px_rgba(11,27,59,0.18)] backdrop-blur sm:gap-3 sm:px-5 sm:py-3">
+        <span className="text-[0.55rem] uppercase tracking-[0.32em] text-muted sm:text-[0.65rem]">
           Sections
         </span>
-        <div className="h-px w-12 bg-[color:var(--rule)]" aria-hidden />
-        <div className="flex items-center gap-2">
+        <div className="h-px w-8 bg-[color:var(--rule)] sm:w-12" aria-hidden />
+        <div className="flex items-center gap-1.5 sm:gap-2">
           {sections.map((item, index) => (
             <motion.button
               key={item.id}
@@ -684,13 +744,13 @@ function PanelProgress({
                 duration: 0.4,
                 ease: PREMIUM_EASE
               }}
-              className="pointer-events-auto group relative flex h-8 w-8 items-center justify-center rounded-full border shadow-[0_12px_30px_rgba(11,27,59,0.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--gold)] focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
+              className="pointer-events-auto group relative flex h-7 w-7 items-center justify-center rounded-full border text-[0.6rem] shadow-[0_12px_30px_rgba(11,27,59,0.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--gold)] focus-visible:ring-offset-2 focus-visible:ring-offset-paper sm:h-8 sm:w-8 sm:text-[0.7rem]"
               style={{
                 boxShadow: activeIndex === index ? "0 12px 30px rgba(11, 27, 59, 0.25)" : "none"
               }}
               aria-label={item.name}
             >
-              <span className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white/90 px-2 py-1 text-[0.65rem] text-[#333] opacity-0 shadow-sm transition-opacity duration-200 group-hover:opacity-100">
+              <span className="pointer-events-none absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white/90 px-2 py-1 text-[0.55rem] text-[#333] opacity-0 shadow-sm transition-opacity duration-200 group-hover:opacity-100 sm:-top-8 sm:text-[0.65rem]">
                 {item.name}
               </span>
               {item.numeral}
